@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent 實現案例 - 盲狗</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .diagram {
+            margin: 20px auto;
+            max-width: 100%;
+            text-align: center;
+        }
+        
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .diagram-caption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .section ul {
+            padding-left: 20px;
+        }
+        
+        .section li {
+            margin-bottom: 8px;
+        }
+        
+        .reference {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 15px 0;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Agent 實現案例 - 盲狗</h1>
+        
+        <div class="content-section">
+            <p>本章節將介紹一個簡單的Agent實現案例：盲狗。這是一個在簡單環境中運行的Agent，用於展示Agent的基本結構和工作原理。</p>
+            
+            <div class="section">
+                <h3>1. 環境描述</h3>
+                <p>假設這個公園，只有單一條直路可行走。所以盲狗的移動只有最簡單的一種：move down。而且在隨機的格子裡，會有食物、水。</p>
+                
+                <div class="diagram">
+                    <svg width="600" height="200" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="100" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                        
+                        <rect x="100" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="130" y="105" font-family="Arial" font-size="12" text-anchor="middle">起點</text>
+                        
+                        <rect x="160" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="190" y="105" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="220" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="250" y="105" font-family="Arial" font-size="12" text-anchor="middle">食物</text>
+                        
+                        <rect x="280" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="310" y="105" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="340" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="370" y="105" font-family="Arial" font-size="12" text-anchor="middle">水</text>
+                        
+                        <rect x="400" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="430" y="105" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="460" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="490" y="105" font-family="Arial" font-size="12" text-anchor="middle">終點</text>
+                        
+                        <circle cx="130" cy="100" r="15" fill="#ffcc00" stroke="#333" stroke-width="2"/>
+                        <text x="130" y="105" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">狗</text>
+                        
+                        <path d="M130,100 L160,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M190,100 L220,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M250,100 L280,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M310,100 L340,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M370,100 L400,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M430,100 L460,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                    <div class="diagram-caption">圖1：盲狗的環境 - 單一直路</div>
+                </div>
+                
+                <p>在這個環境中，盲狗只能感知當前格子中的內容，並根據感知做出相應的動作。</p>
+            </div>
+            
+            <div class="section">
+                <h3>2. 盲狗的感知與動作</h3>
+                <p>在公園裡，最簡單的盲狗，應該要有以下與環境作用的要求：</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>感知 (Percept)</th>
+                            <th>動作 (Action)</th>
+                        </tr>
+                        <tr>
+                            <td>Feel Food</td>
+                            <td>eat</td>
+                        </tr>
+                        <tr>
+                            <td>Feel Water</td>
+                            <td>drink</td>
+                        </tr>
+                        <tr>
+                            <td>Feel Nothing</td>
+                            <td>move down</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="diagram">
+                    <svg width="600" height="250" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="150" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                        
+                        <rect x="100" y="70" width="100" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="150" y="105" font-family="Arial" font-size="12" text-anchor="middle">環境</text>
+                        
+                        <rect x="250" y="70" width="100" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="300" y="105" font-family="Arial" font-size="12" text-anchor="middle">感知</text>
+                        
+                        <rect x="400" y="70" width="100" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="450" y="105" font-family="Arial" font-size="12" text-anchor="middle">條件-動作規則</text>
+                        
+                        <rect x="250" y="150" width="100" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="300" y="185" font-family="Arial" font-size="12" text-anchor="middle">動作</text>
+                        
+                        <line x1="200" y1="100" x2="250" y2="100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <line x1="350" y1="100" x2="400" y2="100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <line x1="300" y1="130" x2="300" y2="150" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                    <div class="diagram-caption">圖2：盲狗的感知與動作流程</div>
+                </div>
+                
+                <p>盲狗的工作流程如下：</p>
+                <ol>
+                    <li>感知當前格子中的內容（食物、水或空）</li>
+                    <li>根據感知選擇相應的動作（吃、喝或向下移動）</li>
+                    <li>執行選定的動作</li>
+                    <li>重複以上步驟，直到到達路的盡頭</li>
+                </ol>
+            </div>
+            
+            <div class="section">
+                <h3>3. 盲狗的實現</h3>
+                <p>這隻盲狗，只會往單一個方向移動，所以只要有食物或水，在走到底之前，就會發現這些東西。是簡單反射型 Agent，只具有最低的 AI。</p>
+                
+                <div class="code-block">
+// 盲狗的簡單實現
+class BlindDog {
+    constructor() {
+        this.position = 0; // 初始位置
+        this.foodEaten = 0; // 吃到的食物數量
+        this.waterDrunk = 0; // 喝到的水數量
+    }
+    
+    // 感知函數
+    perceive(environment) {
+        return environment[this.position];
+    }
+    
+    // 動作函數
+    act(percept) {
+        if (percept === 'food') {
+            this.foodEaten++;
+            return 'eat';
+        } else if (percept === 'water') {
+            this.waterDrunk++;
+            return 'drink';
+        } else {
+            this.position++;
+            return 'move down';
+        }
+    }
+    
+    // 運行函數
+    run(environment) {
+        while (this.position < environment.length) {
+            const percept = this.perceive(environment);
+            const action = this.act(percept);
+            console.log(`位置: ${this.position}, 感知: ${percept}, 動作: ${action}`);
+        }
+        return {
+            foodEaten: this.foodEaten,
+            waterDrunk: this.waterDrunk
+        };
+    }
+}
+
+// 示例環境
+const environment = ['empty', 'food', 'empty', 'water', 'empty', 'empty'];
+const dog = new BlindDog();
+const result = dog.run(environment);
+console.log(`結果: 吃到 ${result.foodEaten} 個食物，喝到 ${result.waterDrunk} 個水`);
+                </div>
+                
+                <div class="diagram">
+                    <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                        
+                        <rect x="100" y="70" width="400" height="140" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="300" y="100" font-family="Arial" font-size="16" text-anchor="middle">盲狗的執行過程</text>
+                        
+                        <rect x="120" y="120" width="360" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                        <text x="300" y="135" font-family="Arial" font-size="12" text-anchor="middle">位置: 0, 感知: empty, 動作: move down</text>
+                        
+                        <rect x="120" y="150" width="360" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                        <text x="300" y="165" font-family="Arial" font-size="12" text-anchor="middle">位置: 1, 感知: food, 動作: eat</text>
+                        
+                        <rect x="120" y="180" width="360" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                        <text x="300" y="195" font-family="Arial" font-size="12" text-anchor="middle">位置: 1, 感知: empty, 動作: move down</text>
+                        
+                        <rect x="120" y="210" width="360" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                        <text x="300" y="225" font-family="Arial" font-size="12" text-anchor="middle">位置: 2, 感知: empty, 動作: move down</text>
+                        
+                        <rect x="120" y="240" width="360" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                        <text x="300" y="255" font-family="Arial" font-size="12" text-anchor="middle">位置: 3, 感知: water, 動作: drink</text>
+                        
+                        <rect x="120" y="270" width="360" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                        <text x="300" y="285" font-family="Arial" font-size="12" text-anchor="middle">位置: 3, 感知: empty, 動作: move down</text>
+                    </svg>
+                    <div class="diagram-caption">圖3：盲狗的執行過程示例</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>4. 盲狗的局限性</h3>
+                <p>如果食物、水會在走過後才隨機出現，則不會回頭的盲狗就會錯過！所以，如果可以把移動的方向改為走到沒路會再回頭也是走到底，可能更好。</p>
+                
+                <div class="diagram">
+                    <svg width="600" height="250" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="150" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                        
+                        <rect x="100" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="130" y="105" font-family="Arial" font-size="12" text-anchor="middle">起點</text>
+                        
+                        <rect x="160" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="190" y="105" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="220" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="250" y="105" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="280" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="310" y="105" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="340" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="370" y="105" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="400" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="430" y="105" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="460" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="490" y="105" font-family="Arial" font-size="12" text-anchor="middle">終點</text>
+                        
+                        <circle cx="130" cy="100" r="15" fill="#ffcc00" stroke="#333" stroke-width="2"/>
+                        <text x="130" y="105" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">狗</text>
+                        
+                        <path d="M130,100 L160,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M190,100 L220,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M250,100 L280,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M310,100 L340,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M370,100 L400,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M430,100 L460,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        
+                        <rect x="160" y="150" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="190" y="185" font-family="Arial" font-size="12" text-anchor="middle">食物</text>
+                        
+                        <rect x="220" y="150" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="250" y="185" font-family="Arial" font-size="12" text-anchor="middle">水</text>
+                        
+                        <circle cx="490" cy="100" r="15" fill="#ffcc00" stroke="#333" stroke-width="2"/>
+                        <text x="490" y="105" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">狗</text>
+                        
+                        <path d="M490,100 L460,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M430,100 L400,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M370,100 L340,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M310,100 L280,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M250,100 L220,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M190,100 L160,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                    <div class="diagram-caption">圖4：盲狗的局限性 - 無法回頭發現新出現的資源</div>
+                </div>
+                
+                <p>為了改進盲狗的性能，我們可以實現一個能夠來回移動的盲狗：</p>
+                
+                <div class="code-block">
+// 改進的盲狗實現 - 可以來回移動
+class ImprovedBlindDog {
+    constructor() {
+        this.position = 0; // 初始位置
+        this.direction = 1; // 1表示向右，-1表示向左
+        this.foodEaten = 0; // 吃到的食物數量
+        this.waterDrunk = 0; // 喝到的水數量
+        this.visited = new Set(); // 記錄已訪問的位置
+    }
+    
+    // 感知函數
+    perceive(environment) {
+        return environment[this.position];
+    }
+    
+    // 動作函數
+    act(percept) {
+        if (percept === 'food') {
+            this.foodEaten++;
+            return 'eat';
+        } else if (percept === 'water') {
+            this.waterDrunk++;
+            return 'drink';
+        } else {
+            // 記錄已訪問的位置
+            this.visited.add(this.position);
+            
+            // 更新位置和方向
+            this.position += this.direction;
+            
+            // 如果到達邊界，改變方向
+            if (this.position >= environment.length - 1) {
+                this.direction = -1;
+            } else if (this.position <= 0) {
+                this.direction = 1;
+            }
+            
+            return 'move ' + (this.direction > 0 ? 'down' : 'up');
+        }
+    }
+    
+    // 運行函數
+    run(environment) {
+        let steps = 0;
+        const maxSteps = environment.length * 2; // 設置最大步數，避免無限循環
+        
+        while (steps < maxSteps) {
+            const percept = this.perceive(environment);
+            const action = this.act(percept);
+            console.log(`位置: ${this.position}, 感知: ${percept}, 動作: ${action}`);
+            steps++;
+        }
+        
+        return {
+            foodEaten: this.foodEaten,
+            waterDrunk: this.waterDrunk,
+            visitedPositions: this.visited.size
+        };
+    }
+}
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>5. 盲狗的擴展可能性</h3>
+                <p>如果公園變為 2D 的情況，則會有更多變化。而且，如果盲狗可以有記憶，或是更有移動活力、或是有更遠的感應能力也會表現更好。</p>
+                
+                <div class="diagram">
+                    <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                        
+                        <rect x="100" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="130" y="105" font-family="Arial" font-size="12" text-anchor="middle">起點</text>
+                        
+                        <rect x="160" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="190" y="105" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="220" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="250" y="105" font-family="Arial" font-size="12" text-anchor="middle">食物</text>
+                        
+                        <rect x="280" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="310" y="105" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="340" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="370" y="105" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="400" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="430" y="105" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="460" y="70" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="490" y="105" font-family="Arial" font-size="12" text-anchor="middle">終點</text>
+                        
+                        <rect x="100" y="130" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="130" y="165" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="160" y="130" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="190" y="165" font-family="Arial" font-size="12" text-anchor="middle">水</text>
+                        
+                        <rect x="220" y="130" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="250" y="165" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="280" y="130" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="310" y="165" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="340" y="130" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="370" y="165" font-family="Arial" font-size="12" text-anchor="middle">食物</text>
+                        
+                        <rect x="400" y="130" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="430" y="165" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="460" y="130" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="490" y="165" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="100" y="190" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="130" y="225" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="160" y="190" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="190" y="225" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="220" y="190" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="250" y="225" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="280" y="190" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="310" y="225" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="340" y="190" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="370" y="225" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <rect x="400" y="190" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="430" y="225" font-family="Arial" font-size="12" text-anchor="middle">水</text>
+                        
+                        <rect x="460" y="190" width="60" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                        <text x="490" y="225" font-family="Arial" font-size="12" text-anchor="middle">空</text>
+                        
+                        <circle cx="130" cy="100" r="15" fill="#ffcc00" stroke="#333" stroke-width="2"/>
+                        <text x="130" y="105" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">狗</text>
+                        
+                        <path d="M130,100 L160,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M190,100 L220,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M250,100 L280,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M310,100 L340,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M370,100 L400,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M430,100 L460,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        
+                        <path d="M130,130 L160,130" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M190,130 L220,130" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M250,130 L280,130" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M310,130 L340,130" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M370,130 L400,130" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M430,130 L460,130" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        
+                        <path d="M130,160 L160,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M190,160 L220,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M250,160 L280,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M310,160 L340,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M370,160 L400,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M430,160 L460,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        
+                        <path d="M130,70 L130,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M160,70 L160,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M190,70 L190,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M220,70 L220,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M250,70 L250,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M280,70 L280,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M310,70 L310,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M340,70 L340,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M370,70 L370,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M400,70 L400,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M430,70 L430,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M460,70 L460,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M490,70 L490,100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        
+                        <path d="M130,130 L130,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M160,130 L160,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M190,130 L190,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M220,130 L220,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M250,130 L250,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M280,130 L280,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M310,130 L310,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M340,130 L340,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M370,130 L370,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M400,130 L400,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M430,130 L430,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M460,130 L460,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M490,130 L490,160" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                    <div class="diagram-caption">圖5：2D環境中的盲狗</div>
+                </div>
+                
+                <p>在2D環境中，盲狗可以有更多的移動選擇：</p>
+                <ul>
+                    <li><strong>上下左右移動</strong>：不再局限於單一方向</li>
+                    <li><strong>記憶能力</strong>：記錄已訪問的位置，避免重複訪問</li>
+                    <li><strong>更遠的感應能力</strong>：可以感知周圍多個格子的內容</li>
+                    <li><strong>路徑規劃</strong>：可以規劃最短路徑到達目標</li>
+                </ul>
+                
+                <p>這些改進可以使盲狗在2D環境中更有效地尋找食物和水。</p>
+            </div>
+        </div>
+        
+        <div class="reference">
+            <p>參考資料：AI(aima4ed) Quiz 01 (2025sp) By Jiun-Ting Jiang</p>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="ai.html" class="back-button">返回人工智能目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

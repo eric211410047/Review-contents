@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作業系統作業2</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .diagram {
+            margin: 20px auto;
+            max-width: 100%;
+            text-align: center;
+        }
+        
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .diagram-caption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question:last-child {
+            border-bottom: none;
+        }
+        
+        .question h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .question ul {
+            padding-left: 20px;
+        }
+        
+        .question li {
+            margin-bottom: 8px;
+        }
+        
+        .reference {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .answer {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .answer h4 {
+            margin-top: 0;
+            color: #2980b9;
+        }
+        
+        .concept {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .concept h4 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        
+        .comparison {
+            background-color: #fffde7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffd600;
+        }
+        
+        .comparison h4 {
+            margin-top: 0;
+            color: #f57f17;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>作業系統作業2</h1>
+        
+        <div class="content-section">
+            <div class="question">
+                <h3>Q1. Describe the relationship between an API, the system-call interface, and the operating system.</h3>
+                
+                <div class="answer">
+                    <p>The relationship between them is foundational to how software interacts with hardware and other software components.</p>
+                    
+                    <div class="diagram">
+                        <svg width="600" height="200" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="50" y="50" width="500" height="150" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            
+                            <rect x="100" y="80" width="120" height="40" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                            <text x="160" y="105" font-family="Arial" font-size="14" text-anchor="middle">Application</text>
+                            
+                            <rect x="240" y="80" width="120" height="40" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                            <text x="300" y="105" font-family="Arial" font-size="14" text-anchor="middle">API</text>
+                            
+                            <rect x="380" y="80" width="120" height="40" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                            <text x="440" y="105" font-family="Arial" font-size="14" text-anchor="middle">System-Call Interface</text>
+                            
+                            <rect x="240" y="140" width="120" height="40" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                            <text x="300" y="165" font-family="Arial" font-size="14" text-anchor="middle">Operating System</text>
+                            
+                            <line x1="220" y1="100" x2="240" y2="100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                            <line x1="360" y1="100" x2="380" y2="100" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                            <line x1="300" y1="120" x2="300" y2="140" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                            
+                            <defs>
+                                <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                                    <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                                </marker>
+                            </defs>
+                        </svg>
+                        <div class="diagram-caption">圖1：API、系統調用接口與作業系統的關係</div>
+                    </div>
+                    
+                    <div class="concept">
+                        <h4>關鍵概念</h4>
+                        <ul>
+                            <li>API (Application Programming Interface) 提供應用程序與作業系統交互的標準方法</li>
+                            <li>系統調用接口是API與作業系統內核之間的橋樑</li>
+                            <li>作業系統通過系統調用接口提供底層硬件資源的訪問</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <h3>Q2. How are iOS and Android similar? How are they different?</h3>
+                
+                <div class="answer">
+                    <div class="comparison">
+                        <h4>相似之處</h4>
+                        <p>iOS and Android are both designed to power smart phones and tablets, providing features like calling, texting and app.</p>
+                    </div>
+                    
+                    <div class="comparison">
+                        <h4>不同之處</h4>
+                        <p>Differences: hardware, software update, develop by different company.</p>
+                    </div>
+                    
+                    <div class="diagram">
+                        <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="50" y="50" width="500" height="250" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            
+                            <rect x="100" y="80" width="180" height="180" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="100" font-family="Arial" font-size="16" text-anchor="middle">iOS</text>
+                            
+                            <rect x="320" y="80" width="180" height="180" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="100" font-family="Arial" font-size="16" text-anchor="middle">Android</text>
+                            
+                            <rect x="120" y="120" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="135" font-family="Arial" font-size="12" text-anchor="middle">Apple Hardware</text>
+                            
+                            <rect x="120" y="150" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="165" font-family="Arial" font-size="12" text-anchor="middle">Controlled Updates</text>
+                            
+                            <rect x="120" y="180" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="195" font-family="Arial" font-size="12" text-anchor="middle">Closed Ecosystem</text>
+                            
+                            <rect x="120" y="210" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="225" font-family="Arial" font-size="12" text-anchor="middle">Apple Development</text>
+                            
+                            <rect x="340" y="120" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="135" font-family="Arial" font-size="12" text-anchor="middle">Multiple Manufacturers</text>
+                            
+                            <rect x="340" y="150" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="165" font-family="Arial" font-size="12" text-anchor="middle">Fragmented Updates</text>
+                            
+                            <rect x="340" y="180" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="195" font-family="Arial" font-size="12" text-anchor="middle">Open Ecosystem</text>
+                            
+                            <rect x="340" y="210" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="225" font-family="Arial" font-size="12" text-anchor="middle">Google Development</text>
+                        </svg>
+                        <div class="diagram-caption">圖2：iOS與Android的比較</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <h3>Q3. Why do some systems store the operating system in firmware, while others store it on disk?</h3>
+                
+                <div class="answer">
+                    <p>I think it depends on the use of operating system, designed constraints, and operational requirements.</p>
+                    
+                    <div class="diagram">
+                        <svg width="600" height="250" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            
+                            <rect x="100" y="80" width="180" height="140" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="100" font-family="Arial" font-size="16" text-anchor="middle">Firmware Storage</text>
+                            
+                            <rect x="320" y="80" width="180" height="140" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="100" font-family="Arial" font-size="16" text-anchor="middle">Disk Storage</text>
+                            
+                            <rect x="120" y="120" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="135" font-family="Arial" font-size="12" text-anchor="middle">Embedded Systems</text>
+                            
+                            <rect x="120" y="150" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="165" font-family="Arial" font-size="12" text-anchor="middle">Limited Resources</text>
+                            
+                            <rect x="120" y="180" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="195" font-family="Arial" font-size="12" text-anchor="middle">Fast Boot Time</text>
+                            
+                            <rect x="340" y="120" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="135" font-family="Arial" font-size="12" text-anchor="middle">General-Purpose Computers</text>
+                            
+                            <rect x="340" y="150" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="165" font-family="Arial" font-size="12" text-anchor="middle">Flexible Updates</text>
+                            
+                            <rect x="340" y="180" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="195" font-family="Arial" font-size="12" text-anchor="middle">Larger Storage Capacity</text>
+                        </svg>
+                        <div class="diagram-caption">圖3：作業系統存儲位置的比較</div>
+                    </div>
+                    
+                    <div class="concept">
+                        <h4>存儲位置的考慮因素</h4>
+                        <ul>
+                            <li>系統類型和用途</li>
+                            <li>硬件資源限制</li>
+                            <li>啟動時間要求</li>
+                            <li>更新靈活性需求</li>
+                            <li>存儲容量限制</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <h3>Q4. What are the differences between the multiprogramming and multitasking structures?</h3>
+                
+                <div class="answer">
+                    <p>The difference between them is that Multiprogramming allows multiple programs store in memory at the same time, with the CPU executing one at a time, and Multitasking allows multiple tasks to share the CPU by switching between them.</p>
+                    
+                    <div class="diagram">
+                        <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="50" y="50" width="500" height="250" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            
+                            <rect x="100" y="80" width="180" height="180" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="100" font-family="Arial" font-size="16" text-anchor="middle">Multiprogramming</text>
+                            
+                            <rect x="320" y="80" width="180" height="180" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="100" font-family="Arial" font-size="16" text-anchor="middle">Multitasking</text>
+                            
+                            <rect x="120" y="120" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="135" font-family="Arial" font-size="12" text-anchor="middle">Multiple Programs in Memory</text>
+                            
+                            <rect x="120" y="150" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="165" font-family="Arial" font-size="12" text-anchor="middle">One Program at a Time</text>
+                            
+                            <rect x="120" y="180" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="195" font-family="Arial" font-size="12" text-anchor="middle">No Time Sharing</text>
+                            
+                            <rect x="120" y="210" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="190" y="225" font-family="Arial" font-size="12" text-anchor="middle">Program-Level Switching</text>
+                            
+                            <rect x="340" y="120" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="135" font-family="Arial" font-size="12" text-anchor="middle">Multiple Tasks in Memory</text>
+                            
+                            <rect x="340" y="150" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="165" font-family="Arial" font-size="12" text-anchor="middle">Multiple Tasks Simultaneously</text>
+                            
+                            <rect x="340" y="180" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="195" font-family="Arial" font-size="12" text-anchor="middle">Time Sharing</text>
+                            
+                            <rect x="340" y="210" width="140" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                            <text x="410" y="225" font-family="Arial" font-size="12" text-anchor="middle">Task-Level Switching</text>
+                        </svg>
+                        <div class="diagram-caption">圖4：多程序與多任務的比較</div>
+                    </div>
+                    
+                    <div class="concept">
+                        <h4>主要區別</h4>
+                        <ul>
+                            <li>多程序：多個程序同時存在於內存中，但CPU一次只執行一個程序</li>
+                            <li>多任務：多個任務共享CPU，通過時間片輪轉在任務之間切換</li>
+                            <li>多程序是程序級別的切換，多任務是任務級別的切換</li>
+                            <li>多任務實現了真正的並發執行，而多程序只是提高了CPU利用率</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="reference">
+            <p>參考資料：Operating System Concepts – 10th Edition by Silberschatz, Galvin and Gagne ©2018</p>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="os.html" class="back-button">返回作業系統目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

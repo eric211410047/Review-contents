@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 知識庫設計中的霍恩子句分析</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .diagram {
+            margin: 20px auto;
+            max-width: 100%;
+            text-align: center;
+        }
+        
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .diagram-caption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .section ul {
+            padding-left: 20px;
+        }
+        
+        .section li {
+            margin-bottom: 8px;
+        }
+        
+        .reference {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 15px 0;
+            white-space: pre-wrap;
+        }
+        
+        .analysis {
+            background-color: #e6f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI 知識庫設計中的霍恩子句分析</h1>
+        
+        <div class="content-section">
+            <div class="section">
+                <h3>AI 知識庫設計中被採用的優點</h3>
+                <div class="analysis">
+                    <p><strong>a1) 高效的推理能力：</strong>霍恩子句是一種特殊的邏輯表達式，通常形式為「若 A1 ∧ A2 ∧ ... ∧ An 則 B」（或單純的事實 B），其中最多只有一個正結論（positive literal）。這種結構方便與前向鏈接（forward chaining）演算或後向鏈接（backward chaining）演算一起使用。</p>
+                    <p><strong>a2) 計算簡單性：</strong>由於霍恩子句的限制性（最多一個正結論），它們在邏輯推理中的解析問題（satisfiability problem）屬於 P 類問題（多項式時間可解），而不是一般的 SAT 問題（NP 完全問題）。特別適合需要快速響應的系統。</p>
+                    <p><strong>a3) 直觀地表達因果關係：</strong>使知識庫中的規則具備較高的可讀性與可解釋性。</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>霍恩子句分析</h3>
+                <div class="analysis">
+                    <p><strong>b1) ¬A ∨ ¬B ∨ C</strong></p>
+                    <p>分析：這個子句有三個文字：¬A（負）、¬B（負）、C（正）。其中只有一個正文字（C），符合霍恩子句的定義。</p>
+                    <p>等價形式： (A ∧ B) → C</p>
+                    <p>結論：是霍恩子句。</p>
+                    
+                    <p><strong>b2) ¬P ∨ ¬Q ∨ R ∨ S</strong></p>
+                    <p>分析：這個子句有四個文字：¬P（負）、¬Q（負）、R（正）、S（正）。這裡有兩個正文字（R 和 S），超過了霍恩子句最多一個正文字的限制。</p>
+                    <p>結論：不是霍恩子句。</p>
+                    
+                    <p><strong>b3) X ∧ Y → Z</strong></p>
+                    <p>注意：「有箭頭」的條件隱含運算式( =>, Implication)的轉換規則： A→B ≡ ¬A∨B，再使用 De Morgan 定律 ¬ (A∧B) = ¬A ∨ ¬B，就可解出本題。</p>
+                    <p>分析：這是條件隱含運算式( =>, Implication)。轉換成子句形式為 ¬X ∨ ¬ Y ∨ Z，其中 ¬X（負）、¬Y（負）、Z（正），只有一個正文字（Z）。</p>
+                    <p>結論：是霍恩子句。</p>
+                    
+                    <p><strong>b4) A ∨ B</strong></p>
+                    <p>分析：這個子句有兩個文字：A（正）、B（正），都是正文字，沒有負文字，且正文字數量超過一個，不符合霍恩子句定義。</p>
+                    <p>結論：不是霍恩子句。</p>
+                    
+                    <p><strong>b5) ¬M ∨ ¬N</strong></p>
+                    <p>分析：這個子句有兩個文字：¬M（負）、¬N（負），沒有正文字。霍恩子句允許零個正文字（表示否定事實），因此這仍然符合定義。</p>
+                    <p>簡單證明：因為可以等價成條件隱含運算式( =>, Implication)： (M ∧ N) → ⊥（表示矛盾或否定事實）</p>
+                    <p>結論：是霍恩子句。</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>子句分析</h3>
+                <div class="analysis">
+                    <p><strong>c1) (¬D ∨ ¬B ∨ C) ∧ (B ∨ ¬A ∨ ¬C) ∧ (¬C ∨ ¬B ∨ E) ∧ (E ∨ ¬D ∨ B) ∧ (B ∨ E ∨ ¬C)</strong></p>
+                    <p>5 個符號(ABCDE)，5 個子句(Clause)</p>
+                    
+                    <p><strong>c2) (¬A ∨ B ∨ C) ∧ (A∨¬B∨D) ∧ (¬C∨D∨E) ∧ (A∨C∨¬E)</strong></p>
+                    <p>5 個符號, 4 個子句。</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="reference">
+            <p>參考資料：AI(aima4ed) Quiz 01 (2025sp) By Jiun-Ting Jiang</p>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="ai.html" class="back-button">返回人工智能目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

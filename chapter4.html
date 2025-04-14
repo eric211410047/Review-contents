@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問題解決智能 - 倒水問題</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .diagram {
+            margin: 20px auto;
+            max-width: 100%;
+            text-align: center;
+        }
+        
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .diagram-caption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .section ul {
+            padding-left: 20px;
+        }
+        
+        .section li {
+            margin-bottom: 8px;
+        }
+        
+        .reference {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 15px 0;
+            white-space: pre-wrap;
+        }
+        
+        .solution {
+            background-color: #e6f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>問題解決智能 - 倒水問題</h1>
+        
+        <div class="content-section">
+            <div class="section">
+                <h3>問題描述</h3>
+                <p>有 3, 7, 13 的水壺各一個，每次操作，只可倒滿或全倒在地上或倒入其他水壺。目標是要倒出 4 的水。</p>
+            </div>
+            
+            <div class="section">
+                <h3>問題形式化</h3>
+                <div class="solution">
+                    <p><strong>解答：</strong></p>
+                    <p>(0) 狀態：就是三個水壺內的水量 [x, y, z]</p>
+                    <p>(1) 初始狀態：三個水壺的值是 [0, 0, 0]</p>
+                    <p>(2) 行動：倒滿水，倒入其他水壺，或全倒在地上</p>
+                    <p>(3) 轉移模型（或稱為後繼函數）：</p>
+                    <p>如果現在的值是 [x, y, z]，那麼可以產生的下一狀態是：</p>
+                    <p>a. 倒滿水： [3, y, z], [x, 7, z], [x, y, 13]</p>
+                    <p>b. 全倒在地上： [0, y, z], [x, 0, z], [x, y, 0]</p>
+                    <p>c. 倒入其他水壺：對於任何具有值為 x 和 y 的兩個水壺，現在要將 y 倒入 x；那麼 x 的水壺會改變為 min((x + y), x 最大容量)，同時也將水壺 y 減去（x 水壺所增加的量）</p>
+                    <p>(4) 目標測試：要得到 4 單位在 x,y 或 z 任何一個水壺，也就是： [4,y,z] 或 [x,4,z] 或 [x,y,4]</p>
+                    <p>(5) 路徑成本：執行倒水的次數</p>
+                    <p>(6) 找到解決方案！步驟如下（[3L 壺, 7L 壺, 13L 壺]）：</p>
+                    <p>步驟 0: (0, 0, 0)</p>
+                    <p>步驟 1: (0, 7, 0)</p>
+                    <p>步驟 2: (3, 4, 0)</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>簡單問題解決代理的虛擬碼</h3>
+                <div class="code-block">
+function SIMPLE-PROBLEM-SOLVING-AGENT(s) returns an action
+persistent:
+    seq, an action sequence. Initially empty
+    state, a description of the current world state
+    goal, a goal to be achieved
+    problem, a problem formulation
+state ← UPDATE-STATE(state,s)
+if seq is empty then
+    goal ← FORMULATE-GOAL(state)
+    problem ← FORMULATE-PROBLEM(state,goal)
+    seq ← SEARCH(problem)
+if seq is empty then return a null action
+action ← FIRST(seq)
+seq ← REST(seq)
+return action
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>問題解決代理的四個階段</h3>
+                <ul>
+                    <li>目標設定：代理人設定要達到布加勒斯特的目標</li>
+                    <li>問題形式化：代理人設計狀態和動作的描述</li>
+                    <li>搜尋：代理人在模型中模擬動作序列，搜尋直到找到達到目標的動作序列</li>
+                    <li>執行：代理人一次執行解決方案中的動作</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h3>問題變體</h3>
+                <p>情境調整：從「簡單目標搜尋」轉變為「最佳化問題」。目標調整為不僅要測量 4L 水，而且要以「最少的水浪費量」達成目標。</p>
+            </div>
+        </div>
+        
+        <div class="reference">
+            <p>參考資料：AI(aima4ed) Quiz 01 (2025sp) By Jiun-Ting Jiang</p>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="ai.html" class="back-button">返回人工智能目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

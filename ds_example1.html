@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資料結構範例：256x256乘法表</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .code-block {
+            background-color: #f5f5f5;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        
+        .code-explanation {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .code-explanation h4 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        
+        .diagram {
+            margin: 20px auto;
+            max-width: 100%;
+            text-align: center;
+        }
+        
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .diagram-caption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .algorithm-steps {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .algorithm-steps h4 {
+            margin-top: 0;
+            color: #1565c0;
+        }
+        
+        .algorithm-steps ol {
+            padding-left: 20px;
+        }
+        
+        .algorithm-steps li {
+            margin-bottom: 8px;
+        }
+        
+        .reference {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>資料結構範例：256x256乘法表</h1>
+        
+        <div class="content-section">
+            <h2>程式碼</h2>
+            
+            <div class="code-block">
+#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define MATRIX_SIZE 257  // 0-256需要257個元素
+
+typedef unsigned char U8;
+typedef unsigned int  U32;
+
+void dump_matrix(int** matrix);
+void store_matrix(int** matrix);
+
+int main()
+{
+    //$ Part 1:
+    U32 u32Idx = 0;
+
+    U32** matrix = (U32**)malloc(sizeof(U32*)*MATRIX_SIZE);
+    for (u32Idx = 0; u32Idx &lt; MATRIX_SIZE; u32Idx++)
+        matrix[u32Idx] = (U32*)malloc(sizeof(U32)*MATRIX_SIZE);
+
+    //$ Part 2:
+    store_matrix(matrix);
+    dump_matrix(matrix);
+
+    // 釋放記憶體
+    for (u32Idx = 0; u32Idx &lt; MATRIX_SIZE; u32Idx++)
+        free(matrix[u32Idx]);
+    free(matrix);
+
+    return 0;
+}
+
+void dump_matrix(int** matrix)
+{
+    U32 u32Idx = 0;
+
+    // 只輸出平方數 (i=j 的情況)
+    for (u32Idx = 0; u32Idx &lt;= 256; u32Idx++)
+    {
+        printf("%dX%d=%d", u32Idx, u32Idx, matrix[u32Idx][u32Idx]);
+        
+        // 每行顯示4個結果
+        if (u32Idx &lt; 256) {
+            if ((u32Idx + 1) % 4 == 0)
+                printf("\n");
+            else
+                printf(" ");
+        }
+    }
+    printf("\n");
+}
+
+void store_matrix(int** matrix)
+{
+    U32 u32Idx1 = 0;
+    U32 u32Idx2 = 0;
+
+    for (u32Idx1 = 0; u32Idx1 &lt; MATRIX_SIZE; u32Idx1++)
+    {
+        for (u32Idx2 = 0; u32Idx2 &lt; MATRIX_SIZE; u32Idx2++)
+        {
+            matrix[u32Idx1][u32Idx2] = u32Idx1 * u32Idx2;
+        }
+    }
+}
+            </div>
+            
+            <div class="code-explanation">
+                <h4>程式碼解釋</h4>
+                <p>這個程式實現了一個256x256的乘法表，使用了二維動態陣列作為資料結構。程式主要分為三個部分：</p>
+                <ol>
+                    <li><strong>記憶體分配</strong>：使用malloc動態分配一個257x257的二維陣列（包含0-256的所有數字）</li>
+                    <li><strong>資料填充</strong>：將乘法表的結果存入陣列中</li>
+                    <li><strong>資料輸出</strong>：只輸出平方數（即i=j的情況），每行顯示4個結果</li>
+                </ol>
+                <p>最後，程式會釋放所有分配的記憶體，避免記憶體洩漏。</p>
+            </div>
+            
+            <div class="diagram">
+                <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    
+                    <rect x="100" y="80" width="400" height="140" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="300" y="100" font-family="Arial" font-size="16" text-anchor="middle">二維動態陣列 (257x257)</text>
+                    
+                    <rect x="120" y="120" width="80" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="135" font-family="Arial" font-size="12" text-anchor="middle">matrix[0][0]</text>
+                    
+                    <rect x="220" y="120" width="80" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    <text x="260" y="135" font-family="Arial" font-size="12" text-anchor="middle">matrix[0][1]</text>
+                    
+                    <rect x="320" y="120" width="80" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    <text x="360" y="135" font-family="Arial" font-size="12" text-anchor="middle">matrix[0][2]</text>
+                    
+                    <rect x="120" y="150" width="80" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="165" font-family="Arial" font-size="12" text-anchor="middle">matrix[1][0]</text>
+                    
+                    <rect x="220" y="150" width="80" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    <text x="260" y="165" font-family="Arial" font-size="12" text-anchor="middle">matrix[1][1]</text>
+                    
+                    <rect x="320" y="150" width="80" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    <text x="360" y="165" font-family="Arial" font-size="12" text-anchor="middle">matrix[1][2]</text>
+                    
+                    <rect x="120" y="180" width="80" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="195" font-family="Arial" font-size="12" text-anchor="middle">matrix[2][0]</text>
+                    
+                    <rect x="220" y="180" width="80" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    <text x="260" y="195" font-family="Arial" font-size="12" text-anchor="middle">matrix[2][1]</text>
+                    
+                    <rect x="320" y="180" width="80" height="20" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    <text x="360" y="195" font-family="Arial" font-size="12" text-anchor="middle">matrix[2][2]</text>
+                    
+                    <text x="300" y="220" font-family="Arial" font-size="14" text-anchor="middle">每個元素存儲 i*j 的值</text>
+                </svg>
+                <div class="diagram-caption">圖1：二維動態陣列的結構</div>
+            </div>
+            
+            <div class="algorithm-steps">
+                <h4>演算法步驟</h4>
+                <ol>
+                    <li><strong>記憶體分配</strong>：使用malloc分配一個257x257的二維陣列</li>
+                    <li><strong>資料填充</strong>：使用巢狀迴圈將乘法表的結果存入陣列中</li>
+                    <li><strong>資料輸出</strong>：只輸出平方數（即i=j的情況），每行顯示4個結果</li>
+                    <li><strong>記憶體釋放</strong>：釋放所有分配的記憶體</li>
+                </ol>
+            </div>
+            
+            <div class="diagram">
+                <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    
+                    <rect x="100" y="80" width="400" height="140" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="300" y="100" font-family="Arial" font-size="16" text-anchor="middle">記憶體管理流程</text>
+                    
+                    <rect x="120" y="120" width="120" height="40" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    <text x="180" y="145" font-family="Arial" font-size="14" text-anchor="middle">分配記憶體</text>
+                    
+                    <rect x="280" y="120" width="120" height="40" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    <text x="340" y="145" font-family="Arial" font-size="14" text-anchor="middle">使用記憶體</text>
+                    
+                    <rect x="440" y="120" width="120" height="40" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    <text x="500" y="145" font-family="Arial" font-size="14" text-anchor="middle">釋放記憶體</text>
+                    
+                    <line x1="240" y1="140" x2="280" y2="140" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="400" y1="140" x2="440" y2="140" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                        </marker>
+                    </defs>
+                    
+                    <text x="300" y="180" font-family="Arial" font-size="14" text-anchor="middle">記憶體洩漏的預防</text>
+                    <text x="300" y="200" font-family="Arial" font-size="12" text-anchor="middle">正確的記憶體管理對於大型程式至關重要</text>
+                </svg>
+                <div class="diagram-caption">圖2：記憶體管理流程</div>
+            </div>
+        </div>
+        
+        <div class="reference">
+            <p>參考資料：資料結構與演算法課程</p>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="ds.html" class="back-button">返回資料結構目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

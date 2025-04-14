@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜尋演算法的評價標準</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .diagram {
+            margin: 20px auto;
+            max-width: 100%;
+            text-align: center;
+        }
+        
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .diagram-caption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .section ul {
+            padding-left: 20px;
+        }
+        
+        .section li {
+            margin-bottom: 8px;
+        }
+        
+        .reference {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 15px 0;
+            white-space: pre-wrap;
+        }
+        
+        .evaluation-criteria {
+            background-color: #e6f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>搜尋演算法的評價標準</h1>
+        
+        <div class="content-section">
+            <div class="section">
+                <h3>四種途徑來評價搜尋演算法的性能</h3>
+                <div class="evaluation-criteria">
+                    <p><strong>完備性(Completeness)</strong> - 當問題有解時，算法是否保證找到一個解</p>
+                    <p><strong>最優性(Optimality)</strong> - 算法是否能找到一個最優解（路徑耗散函數值最小的路徑）</p>
+                    <p><strong>時間複雜性(Time complexity)</strong> - 找到一個解需要花費多少時間</p>
+                    <p><strong>空間複雜性(Space complexity)</strong> - 在搜尋過程中需要佔用多少記憶體(內存)</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="reference">
+            <p>參考資料：AI(aima4ed) Quiz 01 (2025sp) By Jiun-Ting Jiang</p>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="ai.html" class="back-button">返回人工智能目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

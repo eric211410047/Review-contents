@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作業系統存儲與安全</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .key-point {
+            margin: 15px 0;
+            padding-left: 20px;
+            border-left: 3px solid #4CAF50;
+        }
+        
+        .reference {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .diagram {
+            margin: 20px auto;
+            max-width: 100%;
+            text-align: center;
+        }
+        
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .diagram-caption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .data-structure {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>作業系統存儲與安全</h1>
+        
+        <div class="content-section">
+            <h2>大容量存儲管理</h2>
+            <div class="key-point">
+                <p>磁碟通常用於存儲不適合主記憶體的數據或必須保留"長時間"的數據，其管理對系統性能至關重要。</p>
+            </div>
+            
+            <div class="diagram">
+                <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    
+                    <rect x="70" y="70" width="100" height="160" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="120" y="90" font-family="Arial" font-size="14" text-anchor="middle">主記憶體</text>
+                    <text x="120" y="110" font-family="Arial" font-size="12" text-anchor="middle">(RAM)</text>
+                    <text x="120" y="130" font-family="Arial" font-size="12" text-anchor="middle">高速</text>
+                    <text x="120" y="150" font-family="Arial" font-size="12" text-anchor="middle">易失性</text>
+                    <text x="120" y="170" font-family="Arial" font-size="12" text-anchor="middle">昂貴</text>
+                    <text x="120" y="190" font-family="Arial" font-size="12" text-anchor="middle">容量小</text>
+                    
+                    <rect x="190" y="70" width="100" height="160" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="240" y="90" font-family="Arial" font-size="14" text-anchor="middle">磁碟</text>
+                    <text x="240" y="110" font-family="Arial" font-size="12" text-anchor="middle">(硬碟)</text>
+                    <text x="240" y="130" font-family="Arial" font-size="12" text-anchor="middle">中速</text>
+                    <text x="240" y="150" font-family="Arial" font-size="12" text-anchor="middle">非易失性</text>
+                    <text x="240" y="170" font-family="Arial" font-size="12" text-anchor="middle">中等價格</text>
+                    <text x="240" y="190" font-family="Arial" font-size="12" text-anchor="middle">容量大</text>
+                    
+                    <rect x="310" y="70" width="100" height="160" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="360" y="90" font-family="Arial" font-size="14" text-anchor="middle">光學存儲</text>
+                    <text x="360" y="110" font-family="Arial" font-size="12" text-anchor="middle">(CD/DVD)</text>
+                    <text x="360" y="130" font-family="Arial" font-size="12" text-anchor="middle">低速</text>
+                    <text x="360" y="150" font-family="Arial" font-size="12" text-anchor="middle">非易失性</text>
+                    <text x="360" y="170" font-family="Arial" font-size="12" text-anchor="middle">便宜</text>
+                    <text x="360" y="190" font-family="Arial" font-size="12" text-anchor="middle">容量大</text>
+                    
+                    <rect x="430" y="70" width="100" height="160" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="480" y="90" font-family="Arial" font-size="14" text-anchor="middle">磁帶</text>
+                    <text x="480" y="110" font-family="Arial" font-size="12" text-anchor="middle">(備份)</text>
+                    <text x="480" y="130" font-family="Arial" font-size="12" text-anchor="middle">極低速</text>
+                    <text x="480" y="150" font-family="Arial" font-size="12" text-anchor="middle">非易失性</text>
+                    <text x="480" y="170" font-family="Arial" font-size="12" text-anchor="middle">最便宜</text>
+                    <text x="480" y="190" font-family="Arial" font-size="12" text-anchor="middle">容量最大</text>
+                    
+                    <line x1="170" y1="150" x2="190" y2="150" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="290" y1="150" x2="310" y2="150" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="410" y1="150" x2="430" y2="150" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    
+                    <text x="180" y="140" font-family="Arial" font-size="12" text-anchor="middle">速度降低</text>
+                    <text x="300" y="140" font-family="Arial" font-size="12" text-anchor="middle">速度降低</text>
+                    <text x="420" y="140" font-family="Arial" font-size="12" text-anchor="middle">速度降低</text>
+                    
+                    <text x="180" y="160" font-family="Arial" font-size="12" text-anchor="middle">價格降低</text>
+                    <text x="300" y="160" font-family="Arial" font-size="12" text-anchor="middle">價格降低</text>
+                    <text x="420" y="160" font-family="Arial" font-size="12" text-anchor="middle">價格降低</text>
+                    
+                    <text x="180" y="180" font-family="Arial" font-size="12" text-anchor="middle">容量增加</text>
+                    <text x="300" y="180" font-family="Arial" font-size="12" text-anchor="middle">容量增加</text>
+                    <text x="420" y="180" font-family="Arial" font-size="12" text-anchor="middle">容量增加</text>
+                    
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <div class="diagram-caption">圖1：存儲層次結構的性能比較</div>
+            </div>
+            
+            <h3>大容量存儲管理的重要性：</h3>
+            <ul>
+                <li>整個計算機操作的速度取決於磁碟子系統及其算法</li>
+                <li>作業系統活動包括：</li>
+                <ul>
+                    <li>空閒空間管理</li>
+                    <li>存儲分配</li>
+                    <li>磁碟調度</li>
+                </ul>
+                <li>某些存儲不需要快速</li>
+                <li>三級存儲包括光學存儲、磁帶</li>
+                <li>仍然必須由作業系統或應用程序管理</li>
+                <li>在WORM(一次寫入，多次讀取)和RW(讀寫)之間變化</li>
+            </ul>
+            
+            <div class="diagram">
+                <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    
+                    <rect x="100" y="80" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="115" font-family="Arial" font-size="14" text-anchor="middle">磁碟</text>
+                    
+                    <rect x="380" y="80" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="115" font-family="Arial" font-size="14" text-anchor="middle">寄存器</text>
+                    
+                    <rect x="100" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="215" font-family="Arial" font-size="14" text-anchor="middle">數據"A"</text>
+                    <text x="160" y="235" font-family="Arial" font-size="12" text-anchor="middle">(原始位置)</text>
+                    
+                    <rect x="380" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="215" font-family="Arial" font-size="14" text-anchor="middle">數據"A"</text>
+                    <text x="440" y="235" font-family="Arial" font-size="12" text-anchor="middle">(新位置)</text>
+                    
+                    <line x1="160" y1="140" x2="160" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="440" y1="140" x2="440" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    
+                    <line x1="220" y1="110" x2="380" y2="110" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <text x="300" y="100" font-family="Arial" font-size="12" text-anchor="middle">數據遷移</text>
+                    
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <div class="diagram-caption">圖2：數據"A"從磁碟遷移到寄存器</div>
+            </div>
+            
+            <h3>數據遷移注意事項：</h3>
+            <ul>
+                <li>多任務環境必須小心使用最新值，無論它存儲在存儲層次結構的哪個位置</li>
+                <li>多處理器環境必須在硬體中提供緩存一致性，使所有CPU在其緩存中都有最新值</li>
+                <li>分佈式環境情況更為複雜</li>
+                <li>一個數據可以存在多個副本</li>
+                <li>各種解決方案在第17章中討論</li>
+            </ul>
+        </div>
+        
+        <div class="content-section">
+            <h2>I/O子系統</h2>
+            <div class="key-point">
+                <p>作業系統的一個目的是隱藏硬體設備的特性，I/O子系統負責管理I/O的記憶體，包括緩衝、緩存和假脫機。</p>
+            </div>
+            
+            <div class="diagram">
+                <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    
+                    <rect x="100" y="80" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="115" font-family="Arial" font-size="14" text-anchor="middle">用戶程式</text>
+                    
+                    <rect x="380" y="80" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="115" font-family="Arial" font-size="14" text-anchor="middle">硬體設備</text>
+                    
+                    <rect x="100" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="215" font-family="Arial" font-size="14" text-anchor="middle">I/O子系統</text>
+                    <text x="160" y="235" font-family="Arial" font-size="12" text-anchor="middle">(緩衝、緩存、假脫機)</text>
+                    
+                    <rect x="380" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="215" font-family="Arial" font-size="14" text-anchor="middle">設備驅動程式</text>
+                    <text x="440" y="235" font-family="Arial" font-size="12" text-anchor="middle">(特定硬體)</text>
+                    
+                    <line x1="160" y1="140" x2="160" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="440" y1="140" x2="440" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    
+                    <line x1="220" y1="110" x2="380" y2="110" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <text x="300" y="100" font-family="Arial" font-size="12" text-anchor="middle">I/O請求</text>
+                    
+                    <line x1="380" y1="210" x2="220" y2="210" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <text x="300" y="200" font-family="Arial" font-size="12" text-anchor="middle">I/O完成</text>
+                    
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <div class="diagram-caption">圖3：I/O子系統架構</div>
+            </div>
+            
+            <h3>I/O子系統的職責：</h3>
+            <ul>
+                <li>I/O的記憶體管理，包括：</li>
+                <ul>
+                    <li>緩衝(在傳輸過程中臨時存儲數據)</li>
+                    <li>緩存(在更快的存儲中存儲部分數據以提高性能)</li>
+                    <li>假脫機(一個作業的輸出與其他作業的輸入重疊)</li>
+                </ul>
+                <li>通用設備驅動程式接口</li>
+                <li>特定硬體設備的驅動程式</li>
+            </ul>
+        </div>
+        
+        <div class="content-section">
+            <h2>保護與安全</h2>
+            <div class="key-point">
+                <p>保護是控制進程或用戶訪問作業系統定義的資源的任何機制，安全是系統防禦內部和外部攻擊的能力。</p>
+            </div>
+            
+            <div class="diagram">
+                <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    
+                    <rect x="100" y="80" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="115" font-family="Arial" font-size="14" text-anchor="middle">用戶</text>
+                    <text x="160" y="135" font-family="Arial" font-size="12" text-anchor="middle">(用戶ID)</text>
+                    
+                    <rect x="380" y="80" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="115" font-family="Arial" font-size="14" text-anchor="middle">資源</text>
+                    <text x="440" y="135" font-family="Arial" font-size="12" text-anchor="middle">(檔案、進程)</text>
+                    
+                    <rect x="100" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="215" font-family="Arial" font-size="14" text-anchor="middle">保護機制</text>
+                    <text x="160" y="235" font-family="Arial" font-size="12" text-anchor="middle">(訪問控制)</text>
+                    
+                    <rect x="380" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="215" font-family="Arial" font-size="14" text-anchor="middle">安全機制</text>
+                    <text x="440" y="235" font-family="Arial" font-size="12" text-anchor="middle">(防禦攻擊)</text>
+                    
+                    <line x1="160" y1="140" x2="160" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="440" y1="140" x2="440" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    
+                    <line x1="220" y1="110" x2="380" y2="110" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <text x="300" y="100" font-family="Arial" font-size="12" text-anchor="middle">訪問請求</text>
+                    
+                    <line x1="380" y1="210" x2="220" y2="210" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <text x="300" y="200" font-family="Arial" font-size="12" text-anchor="middle">訪問控制</text>
+                    
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <div class="diagram-caption">圖4：保護與安全機制</div>
+            </div>
+            
+            <h3>安全威脅範圍：</h3>
+            <ul>
+                <li>拒絕服務</li>
+                <li>蠕蟲</li>
+                <li>病毒</li>
+                <li>身份盜竊</li>
+                <li>服務盜竊</li>
+            </ul>
+            
+            <h3>用戶身份識別：</h3>
+            <ul>
+                <li>系統通常首先區分用戶，以確定誰可以做什麼</li>
+                <li>用戶身份(用戶ID，安全ID)包括名稱和關聯號碼，每個用戶一個</li>
+                <li>用戶ID然後與該用戶的所有檔案、進程關聯，以確定訪問控制</li>
+                <li>組標識符(組ID)允許定義一組用戶並管理控制，然後也與每個進程、檔案關聯</li>
+                <li>權限提升允許用戶更改為具有更多權限的有效ID</li>
+            </ul>
+        </div>
+        
+        <div class="content-section">
+            <h2>核心數據結構</h2>
+            <div class="key-point">
+                <p>核心使用多種數據結構來管理系統資源和進程，許多與標準程式設計數據結構類似。</p>
+            </div>
+            
+            <div class="data-structure">
+                <h3>鏈表：</h3>
+                <ul>
+                    <li>單向鏈表</li>
+                    <li>雙向鏈表</li>
+                    <li>循環鏈表</li>
+                </ul>
+            </div>
+            
+            <div class="data-structure">
+                <h3>二叉搜索樹：</h3>
+                <ul>
+                    <li>左子樹 <= 右子樹</li>
+                    <li>搜索性能為O(n)</li>
+                    <li>平衡二叉搜索樹為O(lg n)</li>
+                </ul>
+            </div>
+            
+            <div class="data-structure">
+                <h3>其他數據結構：</h3>
+                <ul>
+                    <li>哈希函數可以創建哈希映射</li>
+                    <li>位圖 - 表示n個項目狀態的n個二進制數字字符串</li>
+                    <li>Linux數據結構定義在include文件中：</li>
+                    <ul>
+                        <li>&lt;linux/list.h&gt;</li>
+                        <li>&lt;linux/kfifo.h&gt;</li>
+                        <li>&lt;linux/rbtree.h&gt;</li>
+                    </ul>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2>計算環境 - 傳統</h2>
+            <div class="key-point">
+                <p>傳統計算環境包括獨立通用機器，但界限模糊，因為大多數系統與其他系統互連。</p>
+            </div>
+            
+            <div class="diagram">
+                <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    
+                    <rect x="100" y="80" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="115" font-family="Arial" font-size="14" text-anchor="middle">獨立電腦</text>
+                    
+                    <rect x="380" y="80" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="115" font-family="Arial" font-size="14" text-anchor="middle">網路電腦</text>
+                    <text x="440" y="135" font-family="Arial" font-size="12" text-anchor="middle">(瘦客戶端)</text>
+                    
+                    <rect x="100" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="215" font-family="Arial" font-size="14" text-anchor="middle">移動電腦</text>
+                    <text x="160" y="235" font-family="Arial" font-size="12" text-anchor="middle">(無線網路)</text>
+                    
+                    <rect x="380" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="215" font-family="Arial" font-size="14" text-anchor="middle">家庭系統</text>
+                    <text x="440" y="235" font-family="Arial" font-size="12" text-anchor="middle">(防火牆保護)</text>
+                    
+                    <line x1="160" y1="140" x2="160" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="440" y1="140" x2="440" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    
+                    <line x1="220" y1="110" x2="380" y2="110" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <text x="300" y="100" font-family="Arial" font-size="12" text-anchor="middle">網路連接</text>
+                    
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <div class="diagram-caption">圖5：傳統計算環境</div>
+            </div>
+            
+            <h3>傳統計算環境的特點：</h3>
+            <ul>
+                <li>獨立通用機器</li>
+                <li>但界限模糊，因為大多數系統與其他系統互連(例如，互聯網)</li>
+                <li>門戶提供對內部系統的Web訪問</li>
+                <li>網路電腦(瘦客戶端)類似於Web終端</li>
+                <li>移動電腦通過無線網路互連</li>
+                <li>網路變得無處不在 - 甚至家庭系統也使用防火牆保護家庭電腦免受互聯網攻擊</li>
+            </ul>
+        </div>
+        
+        <div class="reference">
+            <p>參考資料：Silberschatz, Galvin and Gagne ©2018 Operating System Concepts – 10th Edition</p>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="os.html" class="back-button">返回作業系統目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

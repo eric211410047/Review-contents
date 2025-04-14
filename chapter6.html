@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>啟發函數的計算</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .diagram {
+            margin: 20px auto;
+            max-width: 100%;
+            text-align: center;
+        }
+        
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .diagram-caption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .section ul {
+            padding-left: 20px;
+        }
+        
+        .section li {
+            margin-bottom: 8px;
+        }
+        
+        .reference {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 15px 0;
+            white-space: pre-wrap;
+        }
+        
+        .heuristic-function {
+            background-color: #e6f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>啟發函數的計算</h1>
+        
+        <div class="content-section">
+            <div class="section">
+                <h3>啟發函數的計算方法</h3>
+                <div class="heuristic-function">
+                    <p><strong>h1:</strong> 目前只有 2, 3, 7, 8 是正確的，其他的 1, 4, 5, 6 四個都不在正確位置，因此起始狀態的 h1=4，因為每個錯的棋子至少要移動一次到正確位置。</p>
+                    <p><strong>h2:</strong> h2(n)=(曼哈頓距離) =1+0+0+1+1+1+0+0 = 4 (其中，1, 4, 5, 6 都是走 1 步，曼哈頓距是 1 …)</p>
+                    <p><strong>h3:</strong> 所有棋子到達目標位置的曼哈頓距離開根號的總和 = Σ sqrt(曼哈頓距離) 或 h3= max(h1 , h2) 或 h4=(h1+h2)/2 也是可考慮的啟發函數。</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>A* 評估公式</h3>
+                <div class="heuristic-function">
+                    <p>f = g + h 遵循著以下規則：</p>
+                    <p>1. 如果 g(n)為 0，即只計算任意頂點 n 到目標的評估函式 h(n)</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="reference">
+            <p>參考資料：AI(aima4ed) Quiz 01 (2025sp) By Jiun-Ting Jiang</p>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="ai.html" class="back-button">返回人工智能目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資料結構範例：二元樹走訪</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>二元樹走訪 (Tree Traversal)</h1>
+        
+        <div class="content-section">
+            <h2>程式碼</h2>
+            <div class="code-block">
+                <pre><code>// 二元樹節點結構
+#include <stdio.h>
+#include <stdlib.h>
+
+// 定義二元樹節點結構
+typedef struct TreeNode {
+    int data;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+// 創建新節點的函數
+TreeNode* createNode(int value) {
+    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
+    newNode->data = value;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+// 前序遍歷 (Preorder): 根->左->右
+void preorder(TreeNode* root) {
+    if (root != NULL) {
+        printf("%d ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+// 中序遍歷 (Inorder): 左->根->右
+void inorder(TreeNode* root) {
+    if (root != NULL) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+// 後序遍歷 (Postorder): 左->右->根
+void postorder(TreeNode* root) {
+    if (root != NULL) {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d ", root->data);
+    }
+}
+
+int main() {
+    // 創建圖中的二元樹
+    TreeNode* root = createNode(17);
+    root->left = createNode(8);
+    root->right = createNode(26);
+    root->left->left = createNode(4);
+    root->left->right = createNode(11);
+    root->right->right = createNode(31);
+    root->right->right->left = createNode(27);
+
+    // 輸出三種遍歷結果
+    printf("前序遍歷 (Preorder): ");
+    preorder(root);
+    printf("\n");
+
+    printf("中序遍歷 (Inorder): ");
+    inorder(root);
+    printf("\n");
+
+    printf("後序遍歷 (Postorder): ");
+    postorder(root);
+    printf("\n");
+
+    // 釋放記憶體
+    free(root->left->left);
+    free(root->left->right);
+    free(root->right->right->left);
+    free(root->right->right);
+    free(root->right);
+    free(root->left);
+    free(root);
+
+    return 0;
+} 
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2>程式說明</h2>
+            <p>本程式實現了二元樹的三種基本走訪方法：</p>
+            <ol>
+                <li><strong>前序走訪 (Preorder Traversal)</strong>：先處理根節點，再處理左子樹，最後處理右子樹。</li>
+                <li><strong>中序走訪 (Inorder Traversal)</strong>：先處理左子樹，再處理根節點，最後處理右子樹。</li>
+                <li><strong>後序走訪 (Postorder Traversal)</strong>：先處理左子樹，再處理右子樹，最後處理根節點。</li>
+            </ol>
+            <p>每種走訪方法都使用遞迴方式實現，當遇到空節點時返回。</p>
+        </div>
+        
+        <div class="content-section">
+            <h2>走訪示意圖</h2>
+            <div class="diagram">
+                <svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 二元樹結構 -->
+                    <text x="400" y="30" text-anchor="middle" font-size="16">二元樹結構與走訪順序</text>
+                    
+                    <!-- 節點 -->
+                    <circle cx="400" cy="100" r="20" fill="#f0f0f0" stroke="black"/>
+                    <text x="400" y="105" text-anchor="middle" font-size="12">1</text>
+                    
+                    <circle cx="200" cy="200" r="20" fill="#f0f0f0" stroke="black"/>
+                    <text x="200" y="205" text-anchor="middle" font-size="12">2</text>
+                    
+                    <circle cx="600" cy="200" r="20" fill="#f0f0f0" stroke="black"/>
+                    <text x="600" y="205" text-anchor="middle" font-size="12">3</text>
+                    
+                    <circle cx="100" cy="300" r="20" fill="#f0f0f0" stroke="black"/>
+                    <text x="100" y="305" text-anchor="middle" font-size="12">4</text>
+                    
+                    <circle cx="300" cy="300" r="20" fill="#f0f0f0" stroke="black"/>
+                    <text x="300" y="305" text-anchor="middle" font-size="12">5</text>
+                    
+                    <circle cx="500" cy="300" r="20" fill="#f0f0f0" stroke="black"/>
+                    <text x="500" y="305" text-anchor="middle" font-size="12">6</text>
+                    
+                    <circle cx="700" cy="300" r="20" fill="#f0f0f0" stroke="black"/>
+                    <text x="700" y="305" text-anchor="middle" font-size="12">7</text>
+                    
+                    <!-- 連接線 -->
+                    <line x1="380" y1="120" x2="220" y2="180" stroke="black"/>
+                    <line x1="420" y1="120" x2="580" y2="180" stroke="black"/>
+                    <line x1="180" y1="220" x2="120" y2="280" stroke="black"/>
+                    <line x1="220" y1="220" x2="280" y2="280" stroke="black"/>
+                    <line x1="580" y1="220" x2="520" y2="280" stroke="black"/>
+                    <line x1="620" y1="220" x2="680" y2="280" stroke="black"/>
+                    
+                    <!-- 走訪順序標記 -->
+                    <text x="100" y="350" text-anchor="middle" font-size="14">前序：1,2,4,5,3,6,7</text>
+                    <text x="400" y="350" text-anchor="middle" font-size="14">中序：4,2,5,1,6,3,7</text>
+                    <text x="700" y="350" text-anchor="middle" font-size="14">後序：4,5,2,6,7,3,1</text>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2>走訪過程</h2>
+            
+            <div class="subsection">
+                <h3>1. 前序走訪 (Preorder Traversal)</h3>
+                <p>走訪順序：中間節點 → 左子樹 → 右子樹</p>
+                <p>走訪過程：</p>
+                <ol>
+                    <li> 1. 1</li>
+                    <li> 2. 1,2</li>
+                    <li> 3. 1,2,4</li>
+                    <li> 4. 1,2,4,5</li>
+                    <li> 5. 1,2,4,5,3</li>
+                    <li> 6. 1,2,4,5,3,6</li>
+                    <li> 7. 1,2,4,5,3,6,7</li>
+                </ol>
+            </div>
+            
+            <div class="subsection">
+                <h3>2. 中序走訪 (Inorder Traversal)</h3>
+                <p>走訪順序：左子樹 → 中間節點 → 右子樹</p>
+                <p>走訪過程：</p>
+                <ol>
+                    <li>4</li>
+                    <li>4,2</li>
+                    <li>4,2,5</li>
+                    <li>4,2,5,1</li>
+                    <li>4,2,5,1,6</li>
+                    <li>4,2,5,1,6,3</li>
+                    <li>4,2,5,1,6,3,7</li>
+                </ol>
+            </div>
+            
+            <div class="subsection">
+                <h3>3. 後序走訪 (Postorder Traversal)</h3>
+                <p>走訪順序：左子樹 → 右子樹 → 中間節點</p>
+                <p>走訪過程：</p>
+                <ol>
+                    <li>4</li>
+                    <li>4,5</li>
+                    <li>4,5,2</li>
+                    <li>4,5,2,6</li>
+                    <li>4,5,2,6,7</li>
+                    <li>4,5,2,6,7,3</li>
+                    <li>4,5,2,6,7,3,1</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2>應用場景</h2>
+            <ul>
+                <li><strong>前序走訪</strong>：常用於複製樹結構、序列化樹、表達式樹的前綴表示</li>
+                <li><strong>中序走訪</strong>：常用於二元搜尋樹的排序輸出、表達式樹的中綴表示</li>
+                <li><strong>後序走訪</strong>：常用於刪除樹、計算目錄大小、表達式樹的後綴表示</li>
+            </ul>
+        </div>
+        
+
+        
+        <div class="back-to-home">
+            <a href="ds.html" class="back-button">返回資料結構目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>貝葉斯網絡的條件獨立性分析</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .diagram {
+            margin: 20px auto;
+            max-width: 100%;
+            text-align: center;
+        }
+        
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .diagram-caption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .section ul {
+            padding-left: 20px;
+        }
+        
+        .section li {
+            margin-bottom: 8px;
+        }
+        
+        .reference {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 15px 0;
+            white-space: pre-wrap;
+        }
+        
+        .analysis {
+            background-color: #e6f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>貝葉斯網絡的條件獨立性分析</h1>
+        
+        <div class="content-section">
+            <div class="section">
+                <h3>貝葉斯網絡概述</h3>
+                <div class="analysis">
+                    <p>是簡單的貝葉斯網絡，其中天氣是「獨立，(無條件獨立, Unconditional independent)」於其他三個變量，並且在給定蛀牙(Cavity)的條件下，牙痛和探針卡住之間是「條件獨立(conditionally independent)」。</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>牙科診斷場景中的獨立性</h3>
+                <div class="analysis">
+                    <p>在牙科診斷場景中，先用 V 代表蛀牙 (Cavity, V)，其他是英文第一字母代表，以下兩個獨立性：</p>
+                    <p><strong>(1). W⊥(T,C,V)</strong>（天氣與牙科狀況獨立）</p>
+                    <p>這表示天氣（Weather, W）與牙痛、探針卡住或蛀牙無關。天氣變化並不影響一個人是否有蛀牙或牙痛。</p>
+                    
+                    <p><strong>(2) T⊥C ∣V</strong>（給定蛀牙(V)，牙痛與探針卡住條件獨立）</p>
+                    <p>表示牙痛 (T) 和探針卡住 (C) 之間沒有直接的因果關係，但是它們有一個共同原因是蛀牙 (V)。</p>
+                    <p>所以 T 和 C 的關聯完全由 V (Cavity) 解釋。當我們固定 V 的狀態（已知是否有蛀牙），T 和 C 之間的依賴關係就被「切斷」了。若已經知道牙齒有蛀牙，則探針卡住與否不會影響牙痛的機率，反之亦然。</p>
+                    <p>換句話說，牙痛和探針卡住都由與蛀牙有關，但它們彼此之間並不直接影響。</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>數學表達</h3>
+                <div class="analysis">
+                    <p>數學式：P(T,C∣V)=P(T∣V)*P(C∣V)</p>
+                    <p>這表示：在知道蛀牙情況下，牙痛和探針卡住是條件獨立的。</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="reference">
+            <p>參考資料：AI(aima4ed) Quiz 01 (2025sp) By Jiun-Ting Jiang</p>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="ai.html" class="back-button">返回人工智能目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

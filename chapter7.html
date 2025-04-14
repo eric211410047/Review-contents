@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wumpus 世界的推理分析</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .diagram {
+            margin: 20px auto;
+            max-width: 100%;
+            text-align: center;
+        }
+        
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .diagram-caption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .section ul {
+            padding-left: 20px;
+        }
+        
+        .section li {
+            margin-bottom: 8px;
+        }
+        
+        .reference {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 15px 0;
+            white-space: pre-wrap;
+        }
+        
+        .analysis {
+            background-color: #e6f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Wumpus 世界的推理分析</h1>
+        
+        <div class="content-section">
+            <div class="section">
+                <h3>語句分析</h3>
+                <div class="analysis">
+                    <p><strong>α 1:</strong> 的模型(在[1,2]沒有陷阱) (yes)</p>
+                    <p><strong>α 2:</strong> 的模型(在[2,2]沒有陷阱) (Yes)</p>
+                    <p><strong>α 3:</strong> = [1,3]中有一隻 wumpus. (Yes)</p>
+                    <p><strong>α 4:</strong> =[2,2] 有陷阱。 (Not sure)</p>
+                    <p><strong>α 5:</strong> =[1,3] 沒有 wumpus. (Not sure)</p>
+                    <p><strong>α 6:</strong> =[3,1] 沒有 wumpus. (Yes)</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>KB 推理過程</h3>
+                <div class="analysis">
+                    <p>KB 在得到 sensor 感應的環境資訊後，若不用真值表，而直接簡單推理，得出內容：</p>
+                    <p>第一、關於唯一的一隻 wumpus：</p>
+                    <p>(感應訊息 1)因為[2,1]有微風，同時也表示[2,1]沒臭氣，所以[2,2]不會是 wumpus. 但是[1,1]是出發點，必不會有 wumpus。所以[1,1]不會是 wumpus.</p>
+                    <p>(感應訊息 2)現在到[1,2]有臭氣，表示[2,2][1,1][1,2]三格中有唯一的一隻 wumpus.</p>
+                    <p>所以可推理出，[1,2]必是 wumpus.</p>
+                    <p>第二、關於陷阱(Pit)：</p>
+                    <p>(感應訊息 1) [2,1]只有微風，所以[2,2]或[1,3]有 Pit.</p>
+                    <p>(感應訊息 2) [1,2]只有臭氣。同時沒有感應到微風！所以[2,2]不會是 Pit.</p>
+                    <p>所以可以確定[2,2]也不會有 Pit,</p>
+                    <p>發現目前的 KB 是 Pit 只有[3.1]有，而且 Wumpus 必在[1,3]</p>
+                    <p>也就是 W13, P31 是唯一的 True.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>問題分析</h3>
+                <div class="analysis">
+                    <p>a) 請解釋你的 KB 是如何推理到的知識？</p>
+                    <p>b) α 4 =[2,2]沒有陷阱，因為與α 2 相同，所以就參考原題的解釋。(可以 Entail 對! True)</p>
+                    <p>現在請將題目「改為討論α 4 = [2, 2]有陷阱」，就是「有 Pit2,2」=1 (無法 Entail,錯！False)</p>
+                    <p>c) α 5 = [3,1] 中沒有 wumpus. (可以 Entail 對! True)</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="reference">
+            <p>參考資料：AI(aima4ed) Quiz 01 (2025sp) By Jiun-Ting Jiang</p>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="ai.html" class="back-button">返回人工智能目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

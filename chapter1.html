@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 研究方向</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .diagram {
+            margin: 20px auto;
+            max-width: 100%;
+            text-align: center;
+        }
+        
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .diagram-caption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .section ul {
+            padding-left: 20px;
+        }
+        
+        .section li {
+            margin-bottom: 8px;
+        }
+        
+        .reference {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .direction {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .direction h4 {
+            margin-top: 0;
+            color: #2980b9;
+        }
+        
+        .note {
+            background-color: #fffde7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #ffd600;
+        }
+        
+        .conclusion {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI 研究方向</h1>
+        
+        <div class="content-section">
+            <div class="section">
+                <h3>AI 研究的四個主要方向</h3>
+                
+                <div class="direction">
+                    <h4>方向 1: 很像人的思考 (Thinking Humanly)</h4>
+                    <p>像人的內在思考：讓 AI 模仿人類的內在思考過程，例如記憶、情感、推理、決策、思考、學習。</p>
+                </div>
+                
+                <div class="direction">
+                    <h4>方向 2: 很像人的行動 (Acting Humanly)</h4>
+                    <p>像人的外在行為：讓 AI 模仿人類一般的行動，甚至比目前人有更好的行動能力。</p>
+                    <p>圖靈建議：不考慮"機器能否思考"的問題，而是機器在行為上能否通過關於行為的考驗！</p>
+                    
+                    <div class="note">
+                        <p><strong>註：</strong>為了通過圖靈測試，電腦需要六個關鍵能力：</p>
+                        <ul>
+                            <li>自然語言處理（Natural Language Processing）</li>
+                            <li>知識表示（Knowledge Representation）</li>
+                            <li>自動推理（Automated Reasoning）</li>
+                            <li>機器學習（Machine Learning）</li>
+                            <li>計算機視覺與語音識別（Computer Vision and Speech Recognition）</li>
+                            <li>機器人學（Robotics）</li>
+                        </ul>
+                        <p>以上四項是通過圖靈測試的核心功能，若要像人類一樣處理多樣任務的 AI，則需要通用人工智慧（Artificial General Intelligence, AGI），則最後兩項也是不可少！</p>
+                    </div>
+                </div>
+                
+                <div class="direction">
+                    <h4>方向 3: 合理思考 (Thinking Rationally)</h4>
+                    <p>能具有推理、思考的智慧機器：AI 可基於邏輯與數學推理方法進行"正確的思考"，例如基本推理技巧中的「Entail」、專家系統，就是可用邏輯來推理和解決問題。</p>
+                </div>
+                
+                <div class="direction">
+                    <h4>方向 4: 合理行動 (Acting Rationally)</h4>
+                    <p>有理性行動表現的智慧機器(Agent)。像人思考或像人行動，都是要直接模擬人，而且要非常像人。而理性思考或理性行動：只關心讓 AI 達成最優目標的行動，比起「是否像人」，在方法上更形式化，而且可以有清楚的定義或標準。</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>方向四的優勢</h3>
+                <div class="conclusion">
+                    <p>方向四：合理的行動(Acting Rationally)是較容易實現，因為只專注讓 AI 達成最優目標的行動。對初學者而言，除了有許多已成熟的現有技術（如強化學習、機器學習、搜尋演算法、決策理論），而且設計能完成特定任務目標的代理(Agent)，比模仿人類思維或行為更直觀。</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="reference">
+            <p>參考資料：AI(aima4ed) Quiz 01 (2025sp) By Jiun-Ting Jiang</p>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="ai.html" class="back-button">返回人工智能目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

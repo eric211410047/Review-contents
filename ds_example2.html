@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資料結構範例：雙向鏈結</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>雙向鏈結串列實作</h1>
+        
+        <div class="content-section">
+            <h2>程式碼</h2>
+            <div class="code-block">
+                <pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// 定義節點結構
+typedef struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+} Node;
+
+// 定義鏈結串列結構
+typedef struct {
+    Node* head;
+    Node* tail;
+    int size;
+} DoublyLinkedList;
+
+// 初始化鏈結串列
+DoublyLinkedList* createList() {
+    DoublyLinkedList* list = (DoublyLinkedList*)malloc(sizeof(DoublyLinkedList));
+    list->head = NULL;
+    list->tail = NULL;
+    list->size = 0;
+    return list;
+}
+
+// 在串列前端插入節點
+void insertFront(DoublyLinkedList* list, int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = list->head;
+    
+    if (list->head != NULL) {
+        list->head->prev = newNode;
+    } else {
+        list->tail = newNode;
+    }
+    
+    list->head = newNode;
+    list->size++;
+}
+
+// 在串列尾端插入節點
+void insertBack(DoublyLinkedList* list, int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    newNode->prev = list->tail;
+    
+    if (list->tail != NULL) {
+        list->tail->next = newNode;
+    } else {
+        list->head = newNode;
+    }
+    
+    list->tail = newNode;
+    list->size++;
+}
+
+// 刪除串列前端的節點
+void deleteFront(DoublyLinkedList* list) {
+    if (list->head == NULL) return;
+    
+    Node* temp = list->head;
+    list->head = list->head->next;
+    
+    if (list->head != NULL) {
+        list->head->prev = NULL;
+    } else {
+        list->tail = NULL;
+    }
+    
+    free(temp);
+    list->size--;
+}
+
+// 刪除串列尾端的節點
+void deleteBack(DoublyLinkedList* list) {
+    if (list->tail == NULL) return;
+    
+    Node* temp = list->tail;
+    list->tail = list->tail->prev;
+    
+    if (list->tail != NULL) {
+        list->tail->next = NULL;
+    } else {
+        list->head = NULL;
+    }
+    
+    free(temp);
+    list->size--;
+}
+
+// 從前往後遍歷並印出串列
+void printForward(DoublyLinkedList* list) {
+    Node* current = list->head;
+    printf("從前往後遍歷: ");
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
+}
+
+// 從後往前遍歷並印出串列
+void printBackward(DoublyLinkedList* list) {
+    Node* current = list->tail;
+    printf("從後往前遍歷: ");
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->prev;
+    }
+    printf("\n");
+}
+
+// 釋放串列記憶體
+void freeList(DoublyLinkedList* list) {
+    Node* current = list->head;
+    while (current != NULL) {
+        Node* temp = current;
+        current = current->next;
+        free(temp);
+    }
+    free(list);
+}
+
+int main() {
+    // 創建並初始化鏈結串列
+    DoublyLinkedList* list = createList();
+    
+    // 插入一些數據
+    insertFront(list, 1);
+    insertBack(list, 2);
+    insertFront(list, 3);
+    insertBack(list, 4);
+    
+    // 印出串列
+    printForward(list);
+    printBackward(list);
+    
+    // 刪除節點
+    deleteFront(list);
+    deleteBack(list);
+    
+    // 再次印出串列
+    printForward(list);
+    printBackward(list);
+    
+    // 釋放記憶體
+    freeList(list);
+    
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2>程式說明</h2>
+            <p>這個程式實現了一個雙向鏈結串列（Doubly Linked List），具有以下特點：</p>
+            <ul>
+                <li>每個節點包含數據和兩個指針（前向和後向）</li>
+                <li>支援在串列前端和尾端插入節點</li>
+                <li>支援刪除串列前端和尾端的節點</li>
+                <li>可以從前往後和從後往前遍歷串列</li>
+                <li>包含完整的記憶體管理（分配和釋放）</li>
+            </ul>
+        </div>
+        
+        <div class="content-section">
+            <h2>標籤</h2>
+            <div class="tags">
+                <span class="tag">資料結構</span>
+                <span class="tag">鏈結串列</span>
+                <span class="tag">雙向鏈結</span>
+                <span class="tag">C語言</span>
+                <span class="tag">記憶體管理</span>
+                <span class="tag">演算法</span>
+                <span class="tag">程式說明</span>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2>資料結構圖示</h2>
+            <div class="diagram">
+                <svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 節點 -->
+                    <rect x="100" y="50" width="100" height="40" fill="#f0f0f0" stroke="black"/>
+                    <rect x="300" y="50" width="100" height="40" fill="#f0f0f0" stroke="black"/>
+                    <rect x="500" y="50" width="100" height="40" fill="#f0f0f0" stroke="black"/>
+                    
+                    <!-- 數據 -->
+                    <text x="130" y="75" text-anchor="middle" font-size="16">1</text>
+                    <text x="330" y="75" text-anchor="middle" font-size="16">2</text>
+                    <text x="530" y="75" text-anchor="middle" font-size="16">3</text>
+                    
+                    <!-- 指針 -->
+                    <line x1="200" y1="70" x2="300" y2="70" stroke="black" marker-end="url(#arrow)"/>
+                    <line x1="400" y1="70" x2="500" y2="70" stroke="black" marker-end="url(#arrow)"/>
+                    <line x1="300" y1="70" x2="200" y2="70" stroke="black" marker-end="url(#arrow)"/>
+                    <line x1="500" y1="70" x2="400" y2="70" stroke="black" marker-end="url(#arrow)"/>
+                    
+                    <!-- 箭頭標記 -->
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="black"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2>操作流程</h2>
+            <div class="diagram">
+                <svg width="800" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 插入操作 -->
+                    <rect x="50" y="50" width="200" height="100" fill="#f0f0f0" stroke="black"/>
+                    <text x="150" y="80" text-anchor="middle" font-size="16">插入節點</text>
+                    <text x="150" y="110" text-anchor="middle" font-size="14">1. 分配新節點記憶體</text>
+                    <text x="150" y="130" text-anchor="middle" font-size="14">2. 設置數據和指針</text>
+                    <text x="150" y="150" text-anchor="middle" font-size="14">3. 更新相鄰節點指針</text>
+                    
+                    <!-- 刪除操作 -->
+                    <rect x="300" y="50" width="200" height="100" fill="#f0f0f0" stroke="black"/>
+                    <text x="400" y="80" text-anchor="middle" font-size="16">刪除節點</text>
+                    <text x="400" y="110" text-anchor="middle" font-size="14">1. 更新相鄰節點指針</text>
+                    <text x="400" y="130" text-anchor="middle" font-size="14">2. 釋放節點記憶體</text>
+                    <text x="400" y="150" text-anchor="middle" font-size="14">3. 更新串列大小</text>
+                    
+                    <!-- 遍歷操作 -->
+                    <rect x="550" y="50" width="200" height="100" fill="#f0f0f0" stroke="black"/>
+                    <text x="650" y="80" text-anchor="middle" font-size="16">遍歷串列</text>
+                    <text x="650" y="110" text-anchor="middle" font-size="14">1. 從頭節點開始</text>
+                    <text x="650" y="130" text-anchor="middle" font-size="14">2. 依序訪問每個節點</text>
+                    <text x="650" y="150" text-anchor="middle" font-size="14">3. 處理節點數據</text>
+                    
+                    <!-- 連接箭頭 -->
+                    <line x1="250" y1="100" x2="300" y2="100" stroke="black" marker-end="url(#arrow)"/>
+                    <line x1="500" y1="100" x2="550" y2="100" stroke="black" marker-end="url(#arrow)"/>
+                    
+                    <!-- 箭頭標記 -->
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="black"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="ds.html" class="back-button">返回資料結構目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

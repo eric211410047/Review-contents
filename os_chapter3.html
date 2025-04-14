@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作業系統結構與操作</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .key-point {
+            margin: 15px 0;
+            padding-left: 20px;
+            border-left: 3px solid #4CAF50;
+        }
+        
+        .reference {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .diagram {
+            margin: 20px auto;
+            max-width: 100%;
+            text-align: center;
+        }
+        
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .diagram-caption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>作業系統結構與操作</h1>
+        
+        <div class="content-section">
+            <h2>叢集系統</h2>
+            <div class="key-point">
+                <p>叢集系統是由多個系統協同工作組成的系統，類似於多處理器系統，但更靈活。</p>
+            </div>
+            
+            <div class="diagram">
+                <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    
+                    <rect x="100" y="80" width="120" height="80" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="120" font-family="Arial" font-size="14" text-anchor="middle">節點A</text>
+                    <text x="160" y="140" font-family="Arial" font-size="12" text-anchor="middle">(主節點)</text>
+                    
+                    <rect x="380" y="80" width="120" height="80" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="120" font-family="Arial" font-size="14" text-anchor="middle">節點B</text>
+                    <text x="440" y="140" font-family="Arial" font-size="12" text-anchor="middle">(備用節點)</text>
+                    
+                    <rect x="240" y="80" width="120" height="80" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="300" y="120" font-family="Arial" font-size="14" text-anchor="middle">節點C</text>
+                    <text x="300" y="140" font-family="Arial" font-size="12" text-anchor="middle">(主節點)</text>
+                    
+                    <rect x="100" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="210" font-family="Arial" font-size="14" text-anchor="middle">存儲區域網路</text>
+                    <text x="160" y="230" font-family="Arial" font-size="12" text-anchor="middle">(SAN)</text>
+                    
+                    <rect x="380" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="210" font-family="Arial" font-size="14" text-anchor="middle">共享存儲</text>
+                    <text x="440" y="230" font-family="Arial" font-size="12" text-anchor="middle">(磁碟陣列)</text>
+                    
+                    <line x1="160" y1="160" x2="160" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="300" y1="160" x2="300" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="440" y1="160" x2="440" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    
+                    <line x1="220" y1="180" x2="380" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <div class="diagram-caption">圖1：叢集系統架構</div>
+            </div>
+            
+            <h3>叢集系統的特點：</h3>
+            <ul>
+                <li>多個系統協同工作，類似於多處理器系統</li>
+                <li>通常通過存儲區域網路(SAN)共享存儲</li>
+                <li>提供高可用性服務，能夠在故障時繼續運行</li>
+                <li>非對稱叢集：一台機器處於熱備用模式</li>
+                <li>對稱叢集：多個節點運行應用程序，相互監控</li>
+                <li>有些叢集用於高性能計算(HPC)</li>
+                <li>有些叢集具有分佈式鎖管理器(DLM)，避免衝突操作</li>
+            </ul>
+        </div>
+        
+        <div class="content-section">
+            <h2>作業系統結構</h2>
+            <div class="key-point">
+                <p>多道程序設計(批處理系統)對於效率是必要的，單一用戶無法使CPU和I/O設備始終保持忙碌。</p>
+            </div>
+            
+            <div class="diagram">
+                <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    
+                    <rect x="70" y="70" width="100" height="160" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="120" y="90" font-family="Arial" font-size="14" text-anchor="middle">作業1</text>
+                    <text x="120" y="110" font-family="Arial" font-size="12" text-anchor="middle">程式碼</text>
+                    <text x="120" y="130" font-family="Arial" font-size="12" text-anchor="middle">數據</text>
+                    <text x="120" y="150" font-family="Arial" font-size="12" text-anchor="middle">堆疊</text>
+                    <text x="120" y="170" font-family="Arial" font-size="12" text-anchor="middle">PCB</text>
+                    <text x="120" y="190" font-family="Arial" font-size="12" text-anchor="middle">資源</text>
+                    
+                    <rect x="190" y="70" width="100" height="160" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="240" y="90" font-family="Arial" font-size="14" text-anchor="middle">作業2</text>
+                    <text x="240" y="110" font-family="Arial" font-size="12" text-anchor="middle">程式碼</text>
+                    <text x="240" y="130" font-family="Arial" font-size="12" text-anchor="middle">數據</text>
+                    <text x="240" y="150" font-family="Arial" font-size="12" text-anchor="middle">堆疊</text>
+                    <text x="240" y="170" font-family="Arial" font-size="12" text-anchor="middle">PCB</text>
+                    <text x="240" y="190" font-family="Arial" font-size="12" text-anchor="middle">資源</text>
+                    
+                    <rect x="310" y="70" width="100" height="160" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="360" y="90" font-family="Arial" font-size="14" text-anchor="middle">作業3</text>
+                    <text x="360" y="110" font-family="Arial" font-size="12" text-anchor="middle">程式碼</text>
+                    <text x="360" y="130" font-family="Arial" font-size="12" text-anchor="middle">數據</text>
+                    <text x="360" y="150" font-family="Arial" font-size="12" text-anchor="middle">堆疊</text>
+                    <text x="360" y="170" font-family="Arial" font-size="12" text-anchor="middle">PCB</text>
+                    <text x="360" y="190" font-family="Arial" font-size="12" text-anchor="middle">資源</text>
+                    
+                    <rect x="430" y="70" width="100" height="160" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="480" y="90" font-family="Arial" font-size="14" text-anchor="middle">作業4</text>
+                    <text x="480" y="110" font-family="Arial" font-size="12" text-anchor="middle">程式碼</text>
+                    <text x="480" y="130" font-family="Arial" font-size="12" text-anchor="middle">數據</text>
+                    <text x="480" y="150" font-family="Arial" font-size="12" text-anchor="middle">堆疊</text>
+                    <text x="480" y="170" font-family="Arial" font-size="12" text-anchor="middle">PCB</text>
+                    <text x="480" y="190" font-family="Arial" font-size="12" text-anchor="middle">資源</text>
+                    
+                    <rect x="70" y="250" width="460" height="30" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="300" y="270" font-family="Arial" font-size="14" text-anchor="middle">作業調度器</text>
+                    
+                    <line x1="120" y1="230" x2="120" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="240" y1="230" x2="240" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="360" y1="230" x2="360" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="480" y1="230" x2="480" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <div class="diagram-caption">圖2：多道程序設計系統的記憶體佈局</div>
+            </div>
+            
+            <h3>多道程序設計系統的特點：</h3>
+            <ul>
+                <li>組織作業(程式碼和數據)，使CPU始終有一個作業可以執行</li>
+                <li>系統中總作業的一個子集保持在記憶體中</li>
+                <li>通過作業調度選擇一個作業並運行</li>
+                <li>當作業必須等待(例如I/O)時，作業系統切換到另一個作業</li>
+            </ul>
+            
+            <h3>分時系統(多任務)：</h3>
+            <ul>
+                <li>是多道程序設計的邏輯擴展，CPU切換作業如此頻繁，以至於用戶可以在作業運行時與其交互</li>
+                <li>響應時間應小於1秒</li>
+                <li>每個用戶在記憶體中至少有一個程式在執行(進程)</li>
+                <li>如果有多個作業同時準備運行，則需要CPU調度</li>
+                <li>如果進程不適合記憶體，則通過交換將其移入和移出以運行</li>
+                <li>虛擬記憶體允許執行不完全在記憶體中的進程</li>
+            </ul>
+        </div>
+        
+        <div class="content-section">
+            <h2>作業系統操作</h2>
+            <div class="key-point">
+                <p>作業系統是由中斷驅動的(硬體和軟體)，具有雙模式操作以保護自身和其他系統組件。</p>
+            </div>
+            
+            <div class="diagram">
+                <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    
+                    <rect x="100" y="80" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="115" font-family="Arial" font-size="14" text-anchor="middle">用戶程式</text>
+                    
+                    <rect x="380" y="80" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="115" font-family="Arial" font-size="14" text-anchor="middle">核心程式</text>
+                    
+                    <rect x="100" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="215" font-family="Arial" font-size="14" text-anchor="middle">用戶模式</text>
+                    <text x="160" y="235" font-family="Arial" font-size="12" text-anchor="middle">(模式位=1)</text>
+                    
+                    <rect x="380" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="215" font-family="Arial" font-size="14" text-anchor="middle">核心模式</text>
+                    <text x="440" y="235" font-family="Arial" font-size="12" text-anchor="middle">(模式位=0)</text>
+                    
+                    <line x1="160" y1="140" x2="160" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="440" y1="140" x2="440" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    
+                    <line x1="220" y1="110" x2="380" y2="110" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <text x="300" y="100" font-family="Arial" font-size="12" text-anchor="middle">系統調用</text>
+                    
+                    <line x1="380" y1="210" x2="220" y2="210" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <text x="300" y="200" font-family="Arial" font-size="12" text-anchor="middle">返回用戶模式</text>
+                    
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <div class="diagram-caption">圖3：從用戶模式到核心模式的轉換</div>
+            </div>
+            
+            <h3>中斷驅動：</h3>
+            <ul>
+                <li>硬體中斷：由設備之一觸發</li>
+                <li>軟體中斷(異常或陷阱)：</li>
+                <ul>
+                    <li>軟體錯誤(例如，除以零)</li>
+                    <li>請求作業系統服務</li>
+                    <li>其他進程問題包括無限循環、進程相互修改或修改作業系統</li>
+                </ul>
+            </ul>
+            
+            <h3>雙模式操作：</h3>
+            <ul>
+                <li>用戶模式和核心模式</li>
+                <li>由硬體提供的模式位</li>
+                <li>提供區分系統何時運行用戶程式碼或核心程式碼的能力</li>
+                <li>某些指令被指定為特權指令，只能在核心模式下執行</li>
+                <li>系統調用將模式更改為核心，從調用返回將其重置為用戶模式</li>
+                <li>越來越多的CPU支持多模式操作，例如虛擬機管理器(VMM)模式用於客戶虛擬機</li>
+            </ul>
+            
+            <h3>計時器：</h3>
+            <ul>
+                <li>用於防止無限循環/進程佔用資源</li>
+                <li>計時器設置為在一段時間後中斷計算機</li>
+                <li>保持一個由物理時鐘遞減的計數器</li>
+                <li>作業系統設置計數器(特權指令)</li>
+                <li>當計數器為零時產生中斷</li>
+                <li>在調度進程之前設置，以重新獲得控制權或終止超過分配時間的程式</li>
+            </ul>
+        </div>
+        
+        <div class="content-section">
+            <h2>進程管理</h2>
+            <div class="key-point">
+                <p>進程是正在執行的程式，是系統中的工作單元。程式是被動實體，進程是主動實體。</p>
+            </div>
+            
+            <div class="diagram">
+                <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="50" width="500" height="200" fill="#e6f7ff" stroke="#333" stroke-width="2"/>
+                    
+                    <rect x="100" y="80" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="115" font-family="Arial" font-size="14" text-anchor="middle">程式</text>
+                    <text x="160" y="135" font-family="Arial" font-size="12" text-anchor="middle">(被動實體)</text>
+                    
+                    <rect x="380" y="80" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="115" font-family="Arial" font-size="14" text-anchor="middle">進程</text>
+                    <text x="440" y="135" font-family="Arial" font-size="12" text-anchor="middle">(主動實體)</text>
+                    
+                    <rect x="100" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="160" y="215" font-family="Arial" font-size="14" text-anchor="middle">單線程進程</text>
+                    <text x="160" y="235" font-family="Arial" font-size="12" text-anchor="middle">(一個程式計數器)</text>
+                    
+                    <rect x="380" y="180" width="120" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+                    <text x="440" y="215" font-family="Arial" font-size="14" text-anchor="middle">多線程進程</text>
+                    <text x="440" y="235" font-family="Arial" font-size="12" text-anchor="middle">(每個線程一個程式計數器)</text>
+                    
+                    <line x1="160" y1="140" x2="160" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <line x1="440" y1="140" x2="440" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    
+                    <line x1="220" y1="110" x2="380" y2="110" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                    <text x="300" y="100" font-family="Arial" font-size="12" text-anchor="middle">載入到記憶體並執行</text>
+                    
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <div class="diagram-caption">圖4：程式與進程的關係</div>
+            </div>
+            
+            <h3>進程需要資源來完成其任務：</h3>
+            <ul>
+                <li>CPU、記憶體、I/O、檔案</li>
+                <li>初始化數據</li>
+                <li>進程終止需要回收任何可重用資源</li>
+            </ul>
+            
+            <h3>進程執行：</h3>
+            <ul>
+                <li>單線程進程有一個程式計數器，指定要執行的下一條指令的位置</li>
+                <li>進程順序執行指令，一次一條，直到完成</li>
+                <li>多線程進程每個線程有一個程式計數器</li>
+                <li>通常系統有許多進程，有些是用戶進程，有些是作業系統進程，在一個或多個CPU上並發運行</li>
+                <li>通過在進程/線程之間多路復用CPU來實現並發</li>
+            </ul>
+        </div>
+        
+        <div class="reference">
+            <p>參考資料：Silberschatz, Galvin and Gagne ©2018 Operating System Concepts – 10th Edition</p>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="os.html" class="back-button">返回作業系統目錄</a>
+        </div>
+    </div>
+</body>
+</html> 

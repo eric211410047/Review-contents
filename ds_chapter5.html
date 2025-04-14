@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資料結構：二元樹</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>二元樹的基本概念</h1>
+        
+        <div class="content-section">
+            <h2>二元樹的定義</h2>
+            <p>二元樹是由節點所組成的有限集合，允許：</p>
+            <ul>
+                <li>空集合，即樹中沒有任何節點</li>
+                <li>只有1個元素，即樹中的樹根</li>
+                <li>1個樹根+2棵彼此間沒有交集的二元樹(左子樹+右子樹)</li>
+            </ul>
+            <p>特色：樹上的任何一個節點分支度不會超過2</p>
+            <p>二元樹和樹的差異：二元樹允許是空集合</p>
+        </div>
+        
+        <div class="content-section">
+            <h2>二元樹的重要定理</h2>
+            
+            <div class="subsection">
+                <h3>定理1：節點數量上限</h3>
+                <p>二元樹第L階的節點最多2<sup>L-1</sup>個節點，L ≥ 1</p>
+                <p>證明：</p>
+                <ul>
+                    <li>L = 1，二元樹第1階的節點只包含2<sup>0</sup>=1個節點，即樹根(Root)</li>
+                    <li>假設L = N-1成立，二元樹第(N-1)階的節點最多2<sup>N-2</sup>個節點成立</li>
+                    <li>L = N，因為第(N-1)階每個節點最多含有2個子樹，故二元樹第N階的節點最多2*2<sup>N-2</sup> = 2<sup>N-1</sup></li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <h3>定理2：總節點數量上限</h3>
+                <p>深度為K的二元樹，節點最多2<sup>K</sup>-1，K ≥ 1</p>
+                <p>證明：</p>
+                <ul>
+                    <li>基於定理1，二元樹第L階的節點最多2<sup>L-1</sup>個節點，L ≥ 1</li>
+                    <li>深度為K的二元樹最多節點數 = 階層1最多的節點數量 + 階層2最多的節點數量 + ... + 階層K最多的節點數量</li>
+                    <li>= 1 + 2 + ... + 2<sup>K-1</sup> = 2<sup>0</sup> + 2<sup>1</sup> + ... + 2<sup>K-1</sup> = (1-2<sup>K</sup>)/(1-2) = 2<sup>K</sup>-1</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <h3>定理3：葉節點與分支節點關係</h3>
+                <p>對於任何1個非空二元樹T，令n<sub>0</sub>表示樹葉節點的個數，n<sub>2</sub>表示分支度為2節點的個數，則n<sub>0</sub> = n<sub>2</sub> + 1</p>
+                <p>證明：</p>
+                <ul>
+                    <li>令n<sub>1</sub>表示分支度為1節點的個數</li>
+                    <li>令n表示T的節點個數，因此n = n<sub>0</sub> + n<sub>1</sub> + n<sub>2</sub></li>
+                    <li>令E表示T的邊數</li>
+                    <li>除了Root外，每1個節點均被1條邊指向，因此n = E + 1</li>
+                    <li>在所有的邊中，Degree = 2節點貢獻2條邊，Degree = 1節點會貢獻1條邊</li>
+                    <li>即E = 2n<sub>2</sub> + 1*n<sub>1</sub> = 2n<sub>2</sub> + n<sub>1</sub></li>
+                    <li>n = E + 1 = (2n<sub>2</sub> + n<sub>1</sub>) + 1 = n<sub>0</sub> + n<sub>1</sub> + n<sub>2</sub></li>
+                    <li>因此n<sub>0</sub> = n<sub>2</sub> + 1</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2>特別的二元樹</h2>
+            
+            <div class="subsection">
+                <h3>1. 歪斜樹 (Skewed Tree)</h3>
+                <div class="diagram">
+                    <svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 左歪斜樹 -->
+                        <text x="100" y="30" text-anchor="middle" font-size="16">左歪斜樹</text>
+                        <circle cx="100" cy="50" r="15" fill="#f0f0f0" stroke="black"/>
+                        <text x="100" y="55" text-anchor="middle" font-size="12">1</text>
+                        
+                        <circle cx="100" cy="100" r="15" fill="#f0f0f0" stroke="black"/>
+                        <text x="100" y="105" text-anchor="middle" font-size="12">2</text>
+                        
+                        <circle cx="100" cy="150" r="15" fill="#f0f0f0" stroke="black"/>
+                        <text x="100" y="155" text-anchor="middle" font-size="12">3</text>
+                        
+                        <line x1="100" y1="65" x2="100" y2="85" stroke="black"/>
+                        <line x1="100" y1="115" x2="100" y2="135" stroke="black"/>
+                        
+                        <!-- 右歪斜樹 -->
+                        <text x="500" y="30" text-anchor="middle" font-size="16">右歪斜樹</text>
+                        <circle cx="500" cy="50" r="15" fill="#f0f0f0" stroke="black"/>
+                        <text x="500" y="55" text-anchor="middle" font-size="12">1</text>
+                        
+                        <circle cx="500" cy="100" r="15" fill="#f0f0f0" stroke="black"/>
+                        <text x="500" y="105" text-anchor="middle" font-size="12">2</text>
+                        
+                        <circle cx="500" cy="150" r="15" fill="#f0f0f0" stroke="black"/>
+                        <text x="500" y="155" text-anchor="middle" font-size="12">3</text>
+                        
+                        <line x1="500" y1="65" x2="500" y2="85" stroke="black"/>
+                        <line x1="500" y1="115" x2="500" y2="135" stroke="black"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3>2. 完全二元樹或完滿二元樹 (Full Binary Tree)</h3>
+                <p>定義：深度為K並且具有最多節點數量(2<sup>K</sup>-1)的二元樹，其中K ≥ 0</p>
+                <div class="diagram">
+                    <svg width="800" height="300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 完全二元樹 -->
+                        <circle cx="400" cy="50" r="15" fill="#f0f0f0" stroke="black"/>
+                        <text x="400" y="55" text-anchor="middle" font-size="12">1</text>
+                        
+                        <circle cx="200" cy="150" r="15" fill="#f0f0f0" stroke="black"/>
+                        <text x="200" y="155" text-anchor="middle" font-size="12">2</text>
+                        
+                        <circle cx="600" cy="150" r="15" fill="#f0f0f0" stroke="black"/>
+                        <text x="600" y="155" text-anchor="middle" font-size="12">3</text>
+                        
+                        <circle cx="100" cy="250" r="15" fill="#f0f0f0" stroke="black"/>
+                        <text x="100" y="255" text-anchor="middle" font-size="12">4</text>
+                        
+                        <circle cx="300" cy="250" r="15" fill="#f0f0f0" stroke="black"/>
+                        <text x="300" y="255" text-anchor="middle" font-size="12">5</text>
+                        
+                        <circle cx="500" cy="250" r="15" fill="#f0f0f0" stroke="black"/>
+                        <text x="500" y="255" text-anchor="middle" font-size="12">6</text>
+                        
+                        <circle cx="700" cy="250" r="15" fill="#f0f0f0" stroke="black"/>
+                        <text x="700" y="255" text-anchor="middle" font-size="12">7</text>
+                        
+                        <line x1="385" y1="65" x2="215" y2="135" stroke="black"/>
+                        <line x1="415" y1="65" x2="585" y2="135" stroke="black"/>
+                        
+                        <line x1="185" y1="165" x2="115" y2="235" stroke="black"/>
+                        <line x1="215" y1="165" x2="285" y2="235" stroke="black"/>
+                        
+                        <line x1="585" y1="165" x2="515" y2="235" stroke="black"/>
+                        <line x1="615" y1="165" x2="685" y2="235" stroke="black"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3>3. 完整二元樹 (Complete Binary Tree)</h3>
+                <p>前提：給二元樹上的節點編號，編號規則從Root開始，編號為1，同階層順序由左至右開始編號，不同階層順序由上至下開始編號</p>
+                <p>課本定義：一個含有n個節點且深度為K的二元樹是完整二元樹，若且為若它的節點和一個深度為K的完全二元樹，從編號1到n的節點均一致</p>
+                <p>一個深度為K的二元樹，若為完整二元樹，則滿足以下條件：</p>
+                <ul>
+                    <li>第1層到第K-1層的節點Degree均為2</li>
+                    <li>假設第K層的第i個節點編號為ki，若節點ki的Degree = 1須滿足以下兩條件：</li>
+                    <ul>
+                        <li>節點ki只有左子樹</li>
+                        <li>節點k1到節點ki-1的Parent之Degree均為2</li>
+                    </ul>
+                </ul>
+                <p>定理：一個含有n個節點的完整二元樹，其深度為log<sub>2</sub>(n+1)</p>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2>陣列表示法</h2>
+            
+            <div class="subsection">
+                <h3>陣列表示法定理</h3>
+                <p>如果1個具有n個節點的完整二元樹是以由上至下，同階層由左至右的順序進行編號，那麼對於任何一個Index = i的陣列元素，其中1 ≤ i ≤ n：</p>
+                <ul>
+                    <li>如果i ≠ 1，即節點不為Root，其Parent Index = ⌊i/2⌋，如果i = 1，該節點沒有Parent</li>
+                    <li>Left Child的位置 = 2i，其中2i ≤ n，反之，沒有Left Child</li>
+                    <li>Right Child的位置 = 2i + 1，其中2i + 1 ≤ n，反之，沒有Right Child</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <h3>Left Child位置的證明</h3>
+                <p>證明：Left Child的位置 = 2i，其中2i ≤ n，反之，沒有Left Child</p>
+                <p>[數學歸納法]</p>
+                <ul>
+                    <li>i = 1，表示該節點為Root，其Left Child必在i = 2*1=2的位置，除非2i > n</li>
+                    <li>假設i = j-1成立，即節點j-1的Left Child位置 = 2*(j-1)</li>
+                    <li>令i = j，節點j-1的Right Child位置 = 2*(j-1)+1，節點j的Left Child = 節點j-1的Right Child位置 + 1 = 2*(j-1)+1+1 = 2j</li>
+                    <li>因此，依據數學歸納法，Left Child的位置 = 2i，其中2i ≤ n得證</li>
+                </ul>
+            </div>
+            
+            <div class="diagram">
+                <svg width="800" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 陣列表示法示意圖 -->
+                    <text x="400" y="30" text-anchor="middle" font-size="16">陣列表示法示意圖</text>
+                    
+                    <!-- 陣列 -->
+                    <rect x="100" y="50" width="600" height="40" fill="#f0f0f0" stroke="black"/>
+                    <text x="130" y="75" text-anchor="middle" font-size="12">1</text>
+                    <text x="230" y="75" text-anchor="middle" font-size="12">2</text>
+                    <text x="330" y="75" text-anchor="middle" font-size="12">3</text>
+                    <text x="430" y="75" text-anchor="middle" font-size="12">4</text>
+                    <text x="530" y="75" text-anchor="middle" font-size="12">5</text>
+                    <text x="630" y="75" text-anchor="middle" font-size="12">6</text>
+                    
+                    <!-- 索引 -->
+                    <text x="130" y="100" text-anchor="middle" font-size="12">i=1</text>
+                    <text x="230" y="100" text-anchor="middle" font-size="12">i=2</text>
+                    <text x="330" y="100" text-anchor="middle" font-size="12">i=3</text>
+                    <text x="430" y="100" text-anchor="middle" font-size="12">i=4</text>
+                    <text x="530" y="100" text-anchor="middle" font-size="12">i=5</text>
+                    <text x="630" y="100" text-anchor="middle" font-size="12">i=6</text>
+                    
+                    <!-- 關係箭頭 -->
+                    <line x1="130" y1="120" x2="230" y2="150" stroke="black" marker-end="url(#arrow)"/>
+                    <line x1="130" y1="120" x2="330" y2="150" stroke="black" marker-end="url(#arrow)"/>
+                    <line x1="230" y1="150" x2="430" y2="180" stroke="black" marker-end="url(#arrow)"/>
+                    <line x1="230" y1="150" x2="530" y2="180" stroke="black" marker-end="url(#arrow)"/>
+                    <line x1="330" y1="150" x2="630" y2="180" stroke="black" marker-end="url(#arrow)"/>
+                    
+                    <!-- 箭頭標記定義 -->
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="black"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2>鏈結串列表示法</h2>
+            
+            <div class="subsection">
+                <h3>Node 資料結構</h3>
+                <div class="code-block">
+                    <pre><code>struct Node {
+    int data;           // 節點資料
+    struct Node* left;  // 左子節點指標
+    struct Node* right; // 右子節點指標
+};</code></pre>
+                </div>
+                <p>在鏈結串列表示法中，每個節點包含：</p>
+                <ul>
+                    <li>data：儲存節點的資料值</li>
+                    <li>left：指向左子節點的指標</li>
+                    <li>right：指向右子節點的指標</li>
+                </ul>
+            </div>
+            
+            <div class="diagram">
+                <svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 鏈結串列節點結構示意圖 -->
+                    <text x="400" y="30" text-anchor="middle" font-size="16">鏈結串列節點結構</text>
+                    
+                    <!-- 節點框 -->
+                    <rect x="300" y="50" width="200" height="100" fill="#f0f0f0" stroke="black"/>
+                    
+                    <!-- 資料欄位 -->
+                    <rect x="310" y="60" width="80" height="30" fill="white" stroke="black"/>
+                    <text x="350" y="80" text-anchor="middle" font-size="12">data</text>
+                    
+                    <!-- 左子節點指標 -->
+                    <rect x="310" y="100" width="80" height="30" fill="white" stroke="black"/>
+                    <text x="350" y="120" text-anchor="middle" font-size="12">left</text>
+                    
+                    <!-- 右子節點指標 -->
+                    <rect x="410" y="100" width="80" height="30" fill="white" stroke="black"/>
+                    <text x="450" y="120" text-anchor="middle" font-size="12">right</text>
+                    
+                    <!-- 箭頭 -->
+                    <line x1="390" y1="115" x2="410" y2="115" stroke="black" marker-end="url(#arrow)"/>
+                    <line x1="450" y1="115" x2="470" y2="115" stroke="black" marker-end="url(#arrow)"/>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2>二元樹的走訪 (Traversal)</h2>
+            <p>拜訪樹上每個節點一次，有三種拜訪順序：</p>
+            <ul>
+                <li>前序走訪法(Preorder Traversal)：中間節點→左子樹→右子樹</li>
+                <li>中序走訪法(Inorder Traversal)：左子樹→中間節點→右子樹</li>
+                <li>後序走訪法(Postorder Traversal)：左子樹→右子樹→中間節點</li>
+            </ul>
+            
+            <div class="diagram">
+                <svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 走訪順序示意圖 -->
+                    <text x="400" y="30" text-anchor="middle" font-size="16">走訪順序示意圖</text>
+                    
+                    <!-- 節點結構 -->
+                    <circle cx="400" cy="100" r="20" fill="#f0f0f0" stroke="black"/>
+                    <text x="400" y="105" text-anchor="middle" font-size="12">中間節點</text>
+                    
+                    <circle cx="200" cy="150" r="20" fill="#f0f0f0" stroke="black"/>
+                    <text x="200" y="155" text-anchor="middle" font-size="12">左子樹</text>
+                    
+                    <circle cx="600" cy="150" r="20" fill="#f0f0f0" stroke="black"/>
+                    <text x="600" y="155" text-anchor="middle" font-size="12">右子樹</text>
+                    
+                    <!-- 連接線 -->
+                    <line x1="380" y1="120" x2="220" y2="130" stroke="black"/>
+                    <line x1="420" y1="120" x2="580" y2="130" stroke="black"/>
+                </svg>
+            </div>
+            
+            <div class="subsection">
+                <h3>1. 前序走訪法(Preorder Traversal)</h3>
+                <p>走訪順序：中間節點→左子樹→右子樹</p>
+                <p>走訪過程：</p>
+                <ol>
+                    <li>Print 1, Preorder(2), Preorder(3)：1</li>
+                    <li>Print 2, Preorder(4), Preorder(5)：1,2</li>
+                    <li>Print 4, Preorder(8), Preorder(9)：1,2,4</li>
+                    <li>Print 8, Preorder(NULL), Preorder(NULL)：1,2,4,8</li>
+                    <li>Print 9, Preorder(NULL), Preorder(NULL)：1,2,4,8,9</li>
+                    <li>Print 5, Preorder(10), Preorder(11)：1,2,4,8,9,5</li>
+                    <li>Print 10, Preorder(NULL), Preorder(NULL)：1,2,4,8,9,5,10</li>
+                    <li>Print 11, Preorder(NULL), Preorder(NULL)：1,2,4,8,9,5,10,11</li>
+                    <li>Print 3, Preorder(6), Preorder(7)：1,2,4,8,9,5,10,11,3</li>
+                    <li>Print 6, Preorder(12), Preorder(13)：1,2,4,8,9,5,10,11,3,6</li>
+                    <li>Print 12, Preorder(NULL), Preorder(NULL)：1,2,4,8,9,5,10,11,3,6,12</li>
+                    <li>Print 13, Preorder(NULL), Preorder(NULL)：1,2,4,8,9,5,10,11,3,6,12,13</li>
+                    <li>Print 7, Preorder(14), Preorder(15)：1,2,4,8,9,5,10,11,3,6,12,13,7</li>
+                    <li>Print 14, Preorder(NULL), Preorder(NULL)：1,2,4,8,9,5,10,11,3,6,12,13,7,14</li>
+                    <li>Print 15, Preorder(NULL), Preorder(NULL)：1,2,4,8,9,5,10,11,3,6,12,13,7,14,15</li>
+                </ol>
+            </div>
+            
+            <div class="subsection">
+                <h3>2. 中序走訪法(Inorder Traversal)</h3>
+                <p>走訪順序：左子樹→中間節點→右子樹</p>
+                <p>走訪過程：</p>
+                <ol>
+                    <li>8</li>
+                    <li>8,4</li>
+                    <li>8,4,9</li>
+                    <li>8,4,9,2</li>
+                    <li>8,4,9,2,10</li>
+                    <li>8,4,9,2,10,5</li>
+                    <li>8,4,9,2,10,5,11</li>
+                    <li>8,4,9,2,10,5,11,1</li>
+                    <li>8,4,9,2,10,5,11,1,12</li>
+                    <li>8,4,9,2,10,5,11,1,12,6</li>
+                    <li>8,4,9,2,10,5,11,1,12,6,3</li>
+                    <li>8,4,9,2,10,5,11,1,12,6,3,14</li>
+                    <li>8,4,9,2,10,5,11,1,12,6,3,14,7</li>
+                    <li>8,4,9,2,10,5,11,1,12,6,3,14,7,15</li>
+                </ol>
+            </div>
+            
+            <div class="subsection">
+                <h3>3. 後序走訪法(Postorder Traversal)</h3>
+                <p>走訪順序：左子樹→右子樹→中間節點</p>
+                <p>走訪過程：</p>
+                <ol>
+                    <li>8</li>
+                    <li>8,9</li>
+                    <li>8,9,4</li>
+                    <li>8,9,4,10</li>
+                    <li>8,9,4,10,11</li>
+                    <li>8,9,4,10,11,5</li>
+                    <li>8,9,4,10,11,5,2</li>
+                    <li>8,9,4,10,11,5,2,12</li>
+                    <li>8,9,4,10,11,5,2,12,13</li>
+                    <li>8,9,4,10,11,5,2,12,13,6</li>
+                    <li>8,9,4,10,11,5,2,12,13,6,14</li>
+                    <li>8,9,4,10,11,5,2,12,13,6,14,15</li>
+                    <li>8,9,4,10,11,5,2,12,13,6,14,15,7</li>
+                    <li>8,9,4,10,11,5,2,12,13,6,14,15,7,3</li>
+                    <li>8,9,4,10,11,5,2,12,13,6,14,15,7,3,1</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="back-to-home">
+            <a href="ds.html" class="back-button">返回資料結構目錄</a>
+        </div>
+    </div>
+</body>
+</html> 
